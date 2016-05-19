@@ -35,6 +35,10 @@ package {
     import demo.SpineboyExample;
 
     import flash.display.Sprite;
+    import flash.display.StageAlign;
+    import flash.display.StageQuality;
+    import flash.display.StageScaleMode;
+    import flash.events.Event;
 
     import starling.core.Starling;
 
@@ -43,6 +47,15 @@ package {
         private var _starling:Starling;
 
         public function Main () {
+
+            stage.align = StageAlign.TOP_LEFT;
+            stage.scaleMode = StageScaleMode.NO_SCALE;
+            stage.quality = StageQuality.MEDIUM; // mobileではlowに
+            addEventListener(Event.ADDED_TO_STAGE, _init);
+        }
+
+        private function _init(ev:Event=null):void {
+
             var example:Class;
 
             SpineboyExample;
