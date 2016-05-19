@@ -29,7 +29,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-package demo  {
+package demos  {
 	import spine.SkeletonData;
 	import spine.SkeletonJson;
 	import spine.atlas.Atlas;
@@ -45,13 +45,13 @@ package demo  {
 	import starling.events.TouchPhase;
 
 	public class RaptorExample extends Sprite {
-	[Embed(source="/resources/raptor.json", mimeType = "application/octet-stream")]
+	[Embed(source="/../assets/assets/raptor.json", mimeType = "application/octet-stream")]
 	static public const RaptorJson:Class;
 	
-	[Embed(source="/resources/raptor.atlas", mimeType = "application/octet-stream")]
+	[Embed(source="/../assets/assets/raptor.atlas", mimeType = "application/octet-stream")]
 	static public const RaptorAtlas:Class;
 	
-	[Embed(source="/resources/raptor.png")]
+	[Embed(source="/../assets/assets/raptor.png")]
 	static public const RaptorAtlasTexture:Class;
 	
 	private var skeleton:SkeletonAnimation;

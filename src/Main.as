@@ -30,9 +30,7 @@
  *****************************************************************************/
 
 package {
-    import demo.GoblinsExample;
-    import demo.RaptorExample;
-    import demo.SpineboyExample;
+    import demos.StarlingMain;
 
     import flash.display.Sprite;
     import flash.display.StageAlign;
@@ -56,15 +54,7 @@ package {
 
         private function _init(ev:Event=null):void {
 
-            var example:Class;
-
-            SpineboyExample;
-            GoblinsExample;
-            RaptorExample;
-
-            example = RaptorExample;
-
-            _starling = new Starling(example, stage);
+            _starling = new Starling(StarlingMain, stage);
             _starling.enableErrorChecking = true;
             _starling.showStats = true;
             _starling.start();
