@@ -33,9 +33,7 @@ package demos {
             GoblinsExample;
             RaptorExample;
 
-            //_demo.start();
-
-            addChild(new RaptorExample());
+            _demo.start();
 
         }
     }
