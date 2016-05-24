@@ -1,9 +1,10 @@
 package demos {
-    import starling.core.Starling;
-    import starling.display.Sprite;
-    import starling.utils.AssetManager;
 
-    public class StarlingMain extends Sprite {
+	import starling.core.Starling;
+	import starling.display.Sprite;
+	import starling.utils.AssetManager;
+
+	public class StarlingMain extends Sprite {
 
         private var _assetManager:AssetManager;
         private var _demo:DemoBase;
@@ -28,11 +29,6 @@ package demos {
         }
 
         private function _startDemo():void {
-
-            SpineboyExample;
-            GoblinsExample;
-            RaptorExample;
-
             _demo.start();
 
         }

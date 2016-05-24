@@ -15,7 +15,8 @@ package demos {
 
     public class RaptorDemo extends DemoBase {
 
-        private var _skeleton:SkeletonAnimation;
+        private var _skeleton1:SkeletonAnimation;
+        private var _skeleton2:SkeletonAnimation;
         private var _gunGrabbed:Boolean;
 
         public function RaptorDemo(assetManager:AssetManager, starling:Starling = null) {
@@ -42,13 +43,22 @@ package demos {
             json.scale = 0.5;
             var skeletonData:SkeletonData = json.readSkeletonData(skeletonJson);
 
-            _skeleton = new SkeletonAnimation(skeletonData, true);
-            _skeleton.x = 400;
-            _skeleton.y = 560;
-            _skeleton.state.setAnimationByName(0, "walk", true);
+            _skeleton1 = new SkeletonAnimation(skeletonData, true);
+            _skeleton1.x = 180;
+            _skeleton1.y = 520;
+            _skeleton1.scaleX = _skeleton1.scaleY = 0.5;
+            _skeleton1.state.setAnimationByName(0, "walk", true);
+            addChild(_skeleton1);
+            Starling.juggler.add(_skeleton1);
 
-            addChild(_skeleton);
-            Starling.juggler.add(_skeleton);
+            _skeleton2 = new SkeletonAnimation(skeletonData, true);
+            _skeleton2.x = 560;
+            _skeleton2.y = 540;
+            _skeleton2.scaleX = _skeleton2.scaleY = 1.0;
+            _skeleton2.scaleX *= -1;
+            _skeleton2.state.setAnimationByName(0, "walk", true);
+            addChild(_skeleton2);
+            Starling.juggler.add(_skeleton2);
 
             addEventListener(TouchEvent.TOUCH, onClick);
         }
@@ -57,9 +67,9 @@ package demos {
             var touch:Touch = event.getTouch(this);
             if (touch && touch.phase == TouchPhase.BEGAN) {
                 if (_gunGrabbed) {
-                    _skeleton.skeleton.setToSetupPose();
+                    _skeleton2.skeleton.setToSetupPose();
                 } else {
-                    _skeleton.state.setAnimationByName(1, "gungrab", false);
+                    _skeleton2.state.setAnimationByName(1, "gungrab", false);
                 }
                 _gunGrabbed = !_gunGrabbed;
             }
