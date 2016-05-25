@@ -1,11 +1,11 @@
 package {
     import demos.*;
 
-	import starling.core.Starling;
-	import starling.display.Sprite;
-	import starling.utils.AssetManager;
+    import starling.core.Starling;
+    import starling.display.Sprite;
+    import starling.utils.AssetManager;
 
-	public class StarlingMain extends Sprite {
+    public class StarlingMain extends Sprite {
 
         private var _assetManager:AssetManager;
         private var _demo:DemoBase;
@@ -16,7 +16,7 @@ package {
             _assetManager.verbose = true;
 
             var assets:Array = [];
-            _demo = new RaptorDemo(_assetManager, Starling.current);
+            _demo = new GirlDemo(_assetManager, Starling.current);
             _demo.addAssets(assets);
             addChild(_demo);
 
