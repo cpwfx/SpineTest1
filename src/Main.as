@@ -30,7 +30,7 @@
  *****************************************************************************/
 
 package {
-    import demos.StarlingMain;
+    import StarlingMain;
 
     import flash.display.Sprite;
     import flash.display.StageAlign;

@@ -1,4 +1,5 @@
-package demos {
+package {
+    import demos.*;
 
 	import starling.core.Starling;
 	import starling.display.Sprite;

@@ -1,4 +1,6 @@
 package demos {
+    import harayoki.spine.starling.MyStarlingTextureLoader;
+
     import spine.SkeletonData;
     import spine.SkeletonJson;
     import spine.atlas.Atlas;

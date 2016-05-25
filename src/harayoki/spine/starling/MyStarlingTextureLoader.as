@@ -1,4 +1,4 @@
-package demos {
+package harayoki.spine.starling {
     import spine.atlas.AtlasPage;
     import spine.atlas.AtlasRegion;
     import spine.atlas.TextureLoader;
