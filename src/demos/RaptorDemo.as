@@ -1,4 +1,6 @@
 package demos {
+    import flash.utils.ByteArray;
+
     import harayoki.spine.starling.MyStarlingTextureLoader;
 
     import spine.SkeletonData;
@@ -33,9 +35,9 @@ package demos {
 
         public override function start():void {
             var texture:Texture = _assetManager.getTexture("raptor");
-            var atlasData:Object = _assetManager.getByteArray("raptor");
+            var atlasData:ByteArray = _assetManager.getByteArray("raptor");
             var skeletonJson:Object = _assetManager.getObject("raptor");
-            trace(texture, atlasData, skeletonJson);
+//            trace(texture, atlasData, skeletonJson);
 
             var attachmentLoader:AttachmentLoader;
             var spineAtlas:Atlas = new Atlas(atlasData, new MyStarlingTextureLoader(texture)); // !
