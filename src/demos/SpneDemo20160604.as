@@ -16,7 +16,10 @@ package demos {
 
 	import starling.core.Starling;
 	import starling.display.Button;
+	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.textures.Texture;
@@ -26,6 +29,8 @@ package demos {
 
 		private var _animationIndex:int = -1;
 		private var _skinIndex:int = -1;
+		private var _uiSprite:Sprite;
+		private var _lastBtnX:int = 10;
 		private var _textField1:TextField;
 		private var _textField2:TextField;
 		private var _texture:Texture;
@@ -47,6 +52,8 @@ package demos {
 		public function SpneDemo20160604(assetManager:AssetManager, starling:Starling = null) {
 			super(assetManager, starling);
 			_assetName = _lot(_assetNames) + "";
+			_uiSprite = new Sprite();
+			addChild(_uiSprite);
 		}
 
 		public override function addAssets(assets:Array):void {
@@ -74,36 +81,43 @@ package demos {
 			_playNextAnimation();
 
 			var btnY:int = 505;
-			_addButton("play/stop", 20, btnY, function():void{
+			_addButton("play/stop", btnY, function():void{
 				_playing = !_playing;
 				_updateAnimationPlaying();
 			});
 
-			_addButton("change anim", 110, btnY, function():void{
+			_addButton("change anim", btnY, function():void{
 				_playNextAnimation();
 			});
 
-			_addButton("setTo\nSetupPose", 200, btnY, function():void{
+			_addButton("setTo\nSetupPose", btnY, function():void{
 				_skeletonAnimation.skeleton.setToSetupPose()
 			});
 
-			_addButton("change skin", 290, btnY, function():void{
+			_addButton("change skin", btnY, function():void{
 				_applyNextSkin();
 			});
 
-			_addButton("flipX", 380, btnY, function():void{
+			_addButton("flipX", btnY, function():void{
 				_skeleton.flipX = !_skeleton.flipX;
 			});
 
-			_addButton("skewX", 470, btnY, function():void{
+			_addButton("color", btnY, function():void{
+				_skeletonAnimation.skeleton.r = 0.1 + Math.random() * 1.9;
+				_skeletonAnimation.skeleton.g = 0.1 + Math.random() * 1.9;
+				_skeletonAnimation.skeleton.b = 0.1 + Math.random() * 1.9;
+			});
+
+			_addButton("alpha\n(Starling)", btnY, function():void{
+				_skeletonAnimation.alpha = _skeletonAnimation.alpha == 1.0 ? 0.5 : 1.0;
+
+			});
+
+			_addButton("skewX\n(Starling)", btnY, function():void{
 				_skeletonAnimation.skewX = _skeletonAnimation.skewX == 0.0 ? -0.25: 0.0;
 			});
 
-			_addButton("rotation", 560, btnY, function():void{
-				_skeletonAnimation.rotation += Math.PI * 0.1;
-			});
-
-			_addButton("scaleX", 650, btnY, function():void{
+			_addButton("scaleX\n(Starling)", btnY, function():void{
 				_skeletonAnimation.scaleX = _skeletonAnimation.scaleX == 1.0 ? 1.25 : 1.0;
 			});
 
@@ -113,20 +127,25 @@ package demos {
 			trace(_skeletonData.defaultSkin == _skeletonData.skins[0]); // true
 			trace(_skeletonData.findAnimation(_skeletonData.animations[0].name) == _skeletonData.animations[0]); //true
 
-
+			addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
+				if(ev.getTouch(_skeletonAnimation, TouchPhase.ENDED)) {
+					_uiSprite.visible = !_uiSprite.visible;
+				}
+			});
 		}
 
-		private function _addButton(text:String,xx:int,yy:int,callback:Function):void {
+		private function _addButton(text:String,yy:int,callback:Function):void {
 			if(!_texture) {
-				_texture = Texture.fromColor(80, 40, 0xffffffff);
+				_texture = Texture.fromColor(75, 40, 0xffffffff);
 			}
 			var btn:Button = new Button(_texture, text);
-			btn.x = xx;
+			btn.x = _lastBtnX;
 			btn.y = yy;
 			btn.addEventListener(Event.TRIGGERED, function(ev:Event):void{
 				callback();
 			});
-			addChild(btn);
+			_uiSprite.addChild(btn);
+			_lastBtnX += 80;
 		}
 
 		private function _playNextAnimation():void {
@@ -158,14 +177,14 @@ package demos {
 				_textField1.x = 20;
 				_textField1.y = 550;
 				_textField1.autoSize = TextFieldAutoSize.BOTH_DIRECTIONS;
-				addChild(_textField1);
+				_uiSprite.addChild(_textField1);
 			}
 			if(!_textField2) {
 				_textField2 = new TextField(800, 30, "");
 				_textField2.x = 20;
 				_textField2.y = 570;
 				_textField2.autoSize = TextFieldAutoSize.BOTH_DIRECTIONS;
-				addChild(_textField2);
+				_uiSprite.addChild(_textField2);
 			}
 			var anim:Animation = _skeletonData.animations[_animationIndex];
 			_textField1.text =
@@ -180,7 +199,6 @@ package demos {
 			skeletonAnimation.y = yy;
 			addChild(skeletonAnimation);
 			return skeletonAnimation;
-
 		}
 
 		private function _updateAnimationPlaying():void {
