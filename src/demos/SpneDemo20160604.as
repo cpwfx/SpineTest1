@@ -8,6 +8,7 @@ package demos {
 	import spine.SkeletonJson;
 	import spine.Skin;
 	import spine.animation.Animation;
+	import spine.animation.AnimationState;
 	import spine.atlas.Atlas;
 	import spine.attachments.AtlasAttachmentLoader;
 	import spine.attachments.AttachmentLoader;
@@ -32,12 +33,13 @@ package demos {
 		private var _skeletonAnimation:SkeletonAnimation;
 		private var _skeletonData:SkeletonData;
 		private var _skeleton:Skeleton;
+		private var _animationState:AnimationState;
 
-		private var _assetNames:Array = ["goblins-mesh", "spineboy", "raptor", "girl"];
+		private var _assetNames:Array = ["goblins-mesh", "spineboy", "girl"]; //"raptor",
 		private var _scales:Object = {
 			"goblins-mesh" : 1.0,
-			"spineboy": 1.0,
-			"raptor" : 0.5,
+			"spineboy": 0.5,
+			"raptor" : 0.4,
 			"girl": 0.75
 		};
 		private var _assetName:String;
@@ -66,8 +68,9 @@ package demos {
 			json.scale = _scales[_assetName] || 1.0;
 			_skeletonData = json.readSkeletonData(skeletonJson);
 
-			_skeletonAnimation = _addGirl(_skeletonData, 420, 490, true);
+			_skeletonAnimation = _addGirl(_skeletonData, 420, 480);
 			_skeleton = _skeletonAnimation.skeleton;
+			_animationState = _skeletonAnimation.state;
 			_playNextAnimation();
 
 			var btnY:int = 505;
@@ -76,28 +79,46 @@ package demos {
 				_updateAnimationPlaying();
 			});
 
-			_addButton("change anim", 120, btnY, function():void{
+			_addButton("change anim", 110, btnY, function():void{
 				_playNextAnimation();
 			});
 
-			_addButton("pose reset", 220, btnY, function():void{
+			_addButton("setTo\nSetupPose", 200, btnY, function():void{
 				_skeletonAnimation.skeleton.setToSetupPose()
 			});
 
-			_addButton("change skin", 320, btnY, function():void{
+			_addButton("change skin", 290, btnY, function():void{
 				_applyNextSkin();
+			});
+
+			_addButton("flipX", 380, btnY, function():void{
+				_skeleton.flipX = !_skeleton.flipX;
+			});
+
+			_addButton("skewX", 470, btnY, function():void{
+				_skeletonAnimation.skewX = _skeletonAnimation.skewX == 0.0 ? -0.25: 0.0;
+			});
+
+			_addButton("rotation", 560, btnY, function():void{
+				_skeletonAnimation.rotation += Math.PI * 0.1;
+			});
+
+			_addButton("scaleX", 650, btnY, function():void{
+				_skeletonAnimation.scaleX = _skeletonAnimation.scaleX == 1.0 ? 1.25 : 1.0;
 			});
 
 			trace(_skeletonAnimation.skeleton.data == _skeletonData); // true
 			trace(_skeletonData.animations[0].name); // "animation"
 			trace(_skeletonData.skins[0].name); // "default"
 			trace(_skeletonData.defaultSkin == _skeletonData.skins[0]); // true
+			trace(_skeletonData.findAnimation(_skeletonData.animations[0].name) == _skeletonData.animations[0]); //true
+
 
 		}
 
 		private function _addButton(text:String,xx:int,yy:int,callback:Function):void {
 			if(!_texture) {
-				_texture = Texture.fromColor(90, 40, 0xffffffff);
+				_texture = Texture.fromColor(80, 40, 0xffffffff);
 			}
 			var btn:Button = new Button(_texture, text);
 			btn.x = xx;
@@ -114,7 +135,9 @@ package demos {
 				_animationIndex = 0;
 			}
 			var anim:Animation = _skeletonData.animations[_animationIndex];
-			_skeletonAnimation.state.setAnimationByName(0, anim.name, true);
+			_animationState.setAnimationByName(0, anim.name, true);
+
+			// _skeletonAnimation.skeleton.setToSetupPose(); // これを呼ばないとちょっとおかしいままになる
 			_updateInfo();
 		}
 
@@ -125,7 +148,7 @@ package demos {
 			}
 			var skin:Skin = _skeletonData.skins[_skinIndex];
 			_skeleton.skin = skin;
-			_skeletonAnimation.skeleton.setToSetupPose()
+			// _skeletonAnimation.skeleton.setToSetupPose(); // これを呼ばないと変わらない
 			_updateInfo();
 		}
 
@@ -151,12 +174,13 @@ package demos {
 				"skin : " + _skeleton.skinName + " [ " + _skeletonData.skins.join("/") + " ]";
 		}
 
-		private function _addGirl(skeletonData:SkeletonData, xx:int, yy:int, playing:Boolean=true):SkeletonAnimation {
-			var girl:SkeletonAnimation = new SkeletonAnimation(skeletonData, true);
-			girl.x = xx;
-			girl.y = yy;
-			addChild(girl);
-			return girl;
+		private function _addGirl(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
+			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true);
+			skeletonAnimation.x = xx;
+			skeletonAnimation.y = yy;
+			addChild(skeletonAnimation);
+			return skeletonAnimation;
+
 		}
 
 		private function _updateAnimationPlaying():void {
