@@ -16,6 +16,7 @@ package demos {
 
 	import starling.core.Starling;
 	import starling.display.Button;
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
@@ -25,7 +26,7 @@ package demos {
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
 
-	public class SpneDemo20160604 extends DemoBase {
+	public class ScriptDemo1 extends DemoBase {
 
 		private var _animationIndex:int = -1;
 		private var _skinIndex:int = -1;
@@ -49,11 +50,9 @@ package demos {
 		};
 		private var _assetName:String;
 
-		public function SpneDemo20160604(assetManager:AssetManager, starling:Starling = null) {
+		public function ScriptDemo1(assetManager:AssetManager, starling:Starling = null) {
 			super(assetManager, starling);
 			_assetName = _lot(_assetNames) + "";
-			_uiSprite = new Sprite();
-			addChild(_uiSprite);
 		}
 
 		public override function addAssets(assets:Array):void {
@@ -63,6 +62,9 @@ package demos {
 		}
 
 		public override function start():void {
+
+			_uiSprite = new Sprite();
+
 			var texture:Texture = _assetManager.getTexture(_assetName);
 			var atlasData:ByteArray = _assetManager.getByteArray(_assetName);
 			var skeletonJson:Object = _assetManager.getObject(_assetName);
@@ -79,6 +81,8 @@ package demos {
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
 			_playNextAnimation();
+
+			addChild(_uiSprite);
 
 			var btnY:int = 505;
 			_addButton("play/stop", btnY, function():void{
@@ -132,6 +136,7 @@ package demos {
 					_uiSprite.visible = !_uiSprite.visible;
 				}
 			});
+
 		}
 
 		private function _addButton(text:String,yy:int,callback:Function):void {
@@ -186,6 +191,8 @@ package demos {
 				_textField2.autoSize = TextFieldAutoSize.BOTH_DIRECTIONS;
 				_uiSprite.addChild(_textField2);
 			}
+
+			var quad:Quad
 			var anim:Animation = _skeletonData.animations[_animationIndex];
 			_textField1.text =
 				(_playing ? "playing" : "stopped") + " animation : " + anim.name + "[ " + _skeletonData.animations.join("/") + " ]";
