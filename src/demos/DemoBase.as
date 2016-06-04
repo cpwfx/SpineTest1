@@ -27,5 +27,9 @@ package demos {
         public function start():void{
 
         }
+
+        protected function _lot(arr:Array):Object {
+            return arr[~~(Math.random()* arr.length)];
+        }
     }
 }

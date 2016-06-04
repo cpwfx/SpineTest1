@@ -1,5 +1,6 @@
 package {
-    import demos.*;
+    import demos.SpneDemo20160604;
+    import demos.DemoBase;
 
     import starling.core.Starling;
     import starling.display.Sprite;
@@ -16,7 +17,7 @@ package {
             _assetManager.verbose = true;
 
             var assets:Array = [];
-            _demo = new GirlDemo(_assetManager, Starling.current);
+            _demo = new SpneDemo20160604(_assetManager, Starling.current);
             _demo.addAssets(assets);
             addChild(_demo);
 
@@ -27,11 +28,10 @@ package {
                 }
             });
 
-        }
+       }
 
         private function _startDemo():void {
             _demo.start();
-
         }
     }
 }
