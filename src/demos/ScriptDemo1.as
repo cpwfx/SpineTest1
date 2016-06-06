@@ -1,17 +1,11 @@
 package demos {
-	import flash.utils.ByteArray;
-
-	import harayoki.spine.starling.MyStarlingTextureLoader;
+	import harayoki.spine.starling.SpineUtil;
 
 	import spine.Skeleton;
 	import spine.SkeletonData;
-	import spine.SkeletonJson;
 	import spine.Skin;
 	import spine.animation.Animation;
 	import spine.animation.AnimationState;
-	import spine.atlas.Atlas;
-	import spine.attachments.AtlasAttachmentLoader;
-	import spine.attachments.AttachmentLoader;
 	import spine.starling.SkeletonAnimation;
 
 	import starling.core.Starling;
@@ -41,12 +35,14 @@ package demos {
 		private var _skeleton:Skeleton;
 		private var _animationState:AnimationState;
 
-		private var _assetNames:Array = ["goblins-mesh", "spineboy", "girl"]; //"raptor",
-		private var _scales:Object = {
-			"goblins-mesh" : 1.0,
-			"spineboy": 0.5,
-			"raptor" : 0.4,
-			"girl": 0.75
+		private var _assetNames:Array = ["mecha", "goblins-mesh", "spineboy", "girl"]; //"raptor",
+		private var _infos:Object = {
+			"goblins-mesh" : {scale:1.0, pos:{x:420, y:480}},
+			"spineboy" : {scale:0.5, pos:{x:420, y:480}},
+			"raptor"  : {scale:0.4, pos:{x:420, y:480}},
+			"girl": {scale:0.75, pos:{x:420, y:480}},
+			"mecha" : {scale:0.5, pos:{x:128, y:128}},
+			"default" : {scale:0.5, pos:{x:420, y:480}}
 		};
 		private var _assetName:String;
 
@@ -65,19 +61,13 @@ package demos {
 
 			_uiSprite = new Sprite();
 
-			var texture:Texture = _assetManager.getTexture(_assetName);
-			var atlasData:ByteArray = _assetManager.getByteArray(_assetName);
-			var skeletonJson:Object = _assetManager.getObject(_assetName);
+			var info:Object = _infos[_assetName] || _infos["default"];
 
-			var attachmentLoader:AttachmentLoader;
-			var spineAtlas:Atlas = new Atlas(atlasData, new MyStarlingTextureLoader(texture)); // !
-			attachmentLoader = new AtlasAttachmentLoader(spineAtlas);
+			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
-			var json:SkeletonJson = new SkeletonJson(attachmentLoader);
-			json.scale = _scales[_assetName] || 1.0;
-			_skeletonData = json.readSkeletonData(skeletonJson);
+			var pos:Object = info.pos || {x:0, y:0};
+			_skeletonAnimation = _addSkeletonAnimation(_skeletonData, pos.x, pos.y);
 
-			_skeletonAnimation = _addGirl(_skeletonData, 420, 480);
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
 			_playNextAnimation();
@@ -200,7 +190,7 @@ package demos {
 				"skin : " + _skeleton.skinName + " [ " + _skeletonData.skins.join("/") + " ]";
 		}
 
-		private function _addGirl(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
+		private function _addSkeletonAnimation(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
 			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true);
 			skeletonAnimation.x = xx;
 			skeletonAnimation.y = yy;
