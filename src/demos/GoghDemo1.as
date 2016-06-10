@@ -7,6 +7,7 @@ package demos {
 	import spine.animation.Animation;
 	import spine.animation.Animation;
 	import spine.animation.AnimationState;
+	import spine.animation.AnimationStateData;
 	import spine.starling.SkeletonAnimation;
 
 	import starling.core.Starling;
@@ -93,7 +94,7 @@ package demos {
 			_addButton("ぐんぐん@0(上書き)", btnY, function():void{
 				_playAnimation(animGungun, 0, true);
 			}, 0xffcccccc);
-			
+
 			_addButton("play/stop", btnY, function():void{
 				_playing = !_playing;
 				_updateAnimationPlaying();
@@ -162,7 +163,9 @@ package demos {
 		}
 
 		private function _addSkeletonAnimation(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
-			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true);
+			var stateData:AnimationStateData = new AnimationStateData(skeletonData);
+			stateData.defaultMix =  2.0;
+			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true, stateData);
 			skeletonAnimation.x = xx;
 			skeletonAnimation.y = yy;
 			addChild(skeletonAnimation);
