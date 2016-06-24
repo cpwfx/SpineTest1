@@ -3,10 +3,14 @@ package harayoki.spine.starling {
 
 	import spine.SkeletonData;
 	import spine.SkeletonJson;
+	import spine.Slot;
 	import spine.atlas.Atlas;
 	import spine.attachments.AtlasAttachmentLoader;
+	import spine.attachments.Attachment;
 	import spine.attachments.AttachmentLoader;
+	import spine.attachments.RegionAttachment;
 	import spine.starling.SkeletonAnimation;
+	import spine.starling.SkeletonSprite;
 	import spine.starling.StarlingAtlasAttachmentLoader;
 
 	import starling.textures.Texture;
@@ -57,7 +61,7 @@ package harayoki.spine.starling {
 			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(data, true);
 			return skeletonAnimation;
 		}
-
+		
 	}
 
 }

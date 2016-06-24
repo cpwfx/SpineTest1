@@ -1,0 +1,91 @@
+{
+"skeleton": { "hash": "9tFnVRM7Ozp2vlOzobcdVgqsGq4", "spine": "3.3.06", "width": 274, "height": 262, "images": "./material/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "face", "parent": "root", "length": 13.49, "rotation": 92.7, "x": -0.81, "y": -6.69 },
+	{ "name": "armL", "parent": "face", "length": 48.59, "rotation": -46.08, "x": -40.88, "y": -35.34 },
+	{ "name": "armR", "parent": "face", "length": 48.11, "rotation": 42.52, "x": -37.07, "y": 31.32 }
+],
+"slots": [
+	{ "name": "hitArea1", "bone": "face", "attachment": "hitArea1" },
+	{ "name": "face", "bone": "face", "attachment": "face" },
+	{ "name": "armL", "bone": "armL", "attachment": "armL" },
+	{ "name": "armR", "bone": "armR", "attachment": "armR" }
+],
+"skins": {
+	"default": {
+		"armL": {
+			"armL": { "x": 33.91, "y": 0.3, "rotation": -46.62, "width": 67, "height": 72 }
+		},
+		"armR": {
+			"armR": { "x": 32.07, "y": -2.29, "rotation": -135.22, "width": 67, "height": 72 }
+		},
+		"face": {
+			"face": { "x": 7.84, "y": 2.81, "rotation": -92.7, "width": 274, "height": 262 }
+		},
+		"hitArea1": {
+			"hitArea1": {
+				"type": "boundingbox",
+				"vertexCount": 6,
+				"vertices": [ 53.3, 85.32, 97.43, 0.73, 54.34, -74.57, -40.29, -73.92, -70.64, 8.67, -36.53, 75.82 ]
+			}
+		}
+	}
+},
+"animations": {
+	"bowan": {
+		"bones": {
+			"root": {
+				"scale": [
+					{
+						"time": 0,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.1666,
+						"x": 1.153,
+						"y": 1.153,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 0.3333, "x": 1, "y": 1 }
+				]
+			}
+		}
+	},
+	"guruguru": {
+		"bones": {
+			"face": {
+				"rotate": [
+					{ "time": 0, "angle": -2.7 },
+					{ "time": 0.6666, "angle": 117.29 },
+					{ "time": 1.3328, "angle": 237.29 },
+					{ "time": 2, "angle": -2.7 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0.81, "y": 6.69 }
+				]
+			},
+			"armR": {
+				"rotate": [
+					{ "time": 0, "angle": -42.52 },
+					{ "time": 0.5, "angle": 2.47 },
+					{ "time": 1, "angle": -42.52 },
+					{ "time": 1.5, "angle": 2.47 },
+					{ "time": 2, "angle": -42.52 }
+				]
+			},
+			"armL": {
+				"rotate": [
+					{ "time": 0, "angle": 46.08 },
+					{ "time": 0.5, "angle": 1.08 },
+					{ "time": 1, "angle": 46.08 },
+					{ "time": 1.5, "angle": 1.08 },
+					{ "time": 2, "angle": 46.08 }
+				]
+			}
+		}
+	}
+}
+}

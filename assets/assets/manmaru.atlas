@@ -1,0 +1,27 @@
+
+manmaru.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+armL
+  rotate: false
+  xy: 2, 2
+  size: 67, 72
+  orig: 67, 72
+  offset: 0, 0
+  index: -1
+armR
+  rotate: false
+  xy: 278, 266
+  size: 67, 72
+  orig: 67, 72
+  offset: 0, 0
+  index: -1
+face
+  rotate: false
+  xy: 2, 76
+  size: 274, 262
+  orig: 274, 262
+  offset: 0, 0
+  index: -1

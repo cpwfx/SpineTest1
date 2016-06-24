@@ -1,8 +1,10 @@
 package {
     import demos.DemoBase;
     import demos.GoghDemo1;
+    import demos.HitTestDemo1;
 
     import starling.core.Starling;
+    import starling.display.Quad;
     import starling.display.Sprite;
     import starling.utils.AssetManager;
 
@@ -17,7 +19,7 @@ package {
             _assetManager.verbose = true;
 
             var assets:Array = [];
-            _demo = new GoghDemo1(_assetManager, Starling.current);
+            _demo = new HitTestDemo1(_assetManager, Starling.current);
             _demo.addAssets(assets);
             addChild(_demo);
 
