@@ -8,9 +8,16 @@ package demos {
 
 	import spine.Skeleton;
 	import spine.SkeletonData;
+	import spine.Slot;
+	import spine.SlotData;
 	import spine.animation.Animation;
 	import spine.animation.AnimationState;
+	import spine.attachments.Attachment;
 	import spine.attachments.BoundingBoxAttachment;
+	import spine.attachments.FfdAttachment;
+	import spine.attachments.MeshAttachment;
+	import spine.attachments.RegionAttachment;
+	import spine.attachments.WeightedMeshAttachment;
 	import spine.starling.SkeletonAnimation;
 
 	import starling.animation.Transitions;
@@ -36,7 +43,7 @@ package demos {
 
 		private var _assetNames:Array = ["manmaru"];
 		private var _infos:Object = {
-			"default" : {scale:1.0, pos:{x:420, y:250}}
+			"default" : {scale:1.0, pos:{x:420, y:260}}
 		};
 		private var _assetName:String;
 		private var _textField1:TextField;
@@ -80,13 +87,35 @@ package demos {
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
 			trace("animations:", _skeletonData.animations);
-			trace("slots:",_skeletonData.slots);
+			for each(var slot:Slot in _skeleton.slots) {
+				var attachment:Attachment = slot.attachment;
+				if(attachment) {
+					var type:String = "Unknown Attachment";
+					if(attachment is MeshAttachment) {
+						type = "MeshAttachment";
+					}
+					else if(attachment is WeightedMeshAttachment) {
+						type = "WeightedMeshAttachment";
+					}
+					else if(attachment is RegionAttachment) {
+						type = "RegionAttachment";
+					}
+					else if(attachment is BoundingBoxAttachment) {
+						type = "BoundingBoxAttachment";
+					}
+					else if(attachment is FfdAttachment) { // これはなんだ？
+						type = "FfdAttachment";
+					}
+					trace("slot:"+slot, "("+type+"):"+attachment);
+				}
+			}
 
 			var tween:Tween = new Tween(null, 0.0);
 			Starling.juggler.add(_skeletonAnimation);
 
+			_animationState.timeScale = 1.0;
 			_animationState.addAnimation(0, _skeletonData.findAnimation("guruguru"), true, 0);
-			_animationState.timeScale = 0.5;
+			_animationState.getCurrent(0).timeScale = 0.25;
 
 			_skeletonAnimation.touchable = false;
 
@@ -120,14 +149,14 @@ package demos {
 						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
 					}
 
-					//背景のタッチは移動
-					if(_hits.length==0) {
+					if(_hits.length>0) {
+						_showInfo("Touched : " + _hits.join(" and ") + " !");
+					} else {
+						//背景のタッチは移動
 						touch.getLocation(self, sPoint);
 						tween.reset(sp, 1.0, Transitions.EASE_OUT);
 						tween.moveTo(sPoint.x, sPoint.y);
 						Starling.juggler.add(tween);
-					} else {
-						_showInfo("Touched : " + _hits.join(" and ") + " !");
 					}
 
 				}
@@ -146,9 +175,10 @@ package demos {
 			}
 
 			_textField1.text = info;
+			_textField1.visible = true;
 			clearTimeout(_tid);
 			_tid = setTimeout(function():void{
-				_textField1.text = "";
+				_textField1.visible = false;
 			},4000);
 		}
 
