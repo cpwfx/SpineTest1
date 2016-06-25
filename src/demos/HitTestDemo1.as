@@ -9,8 +9,6 @@ package demos {
 	import spine.Skeleton;
 	import spine.SkeletonData;
 	import spine.Slot;
-	import spine.SlotData;
-	import spine.animation.Animation;
 	import spine.animation.AnimationState;
 	import spine.attachments.Attachment;
 	import spine.attachments.BoundingBoxAttachment;
@@ -133,25 +131,26 @@ package demos {
 					var gy:Number = touch.globalY;
 
 					if(_hitTest(gx, gy, ["hitAreaEyes"])) {
-						_hits.push("eyes");
+						_hits.push("Eyes(Bounding:square)");
 					} else if(_hitTest(gx, gy, ["tie"])) {
-						_hits.push("tie");
+						_hits.push("Tie(Region)");
 						_animationState.addAnimation(2, _skeletonData.findAnimation("tie"), false, 0);
 					} else if(_hitTest(gx, gy, ["ribon"])) {
-						_hits.push("ribon");
+						_hits.push("Ribon(Mesh)");
 						_animationState.addAnimation(2, _skeletonData.findAnimation("tie"), false, 0);
 					} else if(_hitTest(gx, gy, ["armR", "armL"])) {
-						_hits.push("arms");
+						_hits.push("Arm(Region)");
 					}
 
 					if(_hitTest(gx, gy, ["hitAreaBody"])) {
-						_hits.push("body");
+						_hits.push("Body(Bounding:hexagon)");
 						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
 					}
 
 					if(_hits.length>0) {
-						_showInfo("Touched : " + _hits.join(" and ") + " !");
+						_showInfo("Touched : " + _hits.join(" and ") + "");
 					} else {
+						_showInfo("Touched : outside");
 						//背景のタッチは移動
 						touch.getLocation(self, sPoint);
 						tween.reset(sp, 1.0, Transitions.EASE_OUT);
