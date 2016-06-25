@@ -1,11 +1,14 @@
 package demos {
 	import flash.geom.Point;
+	import flash.utils.clearTimeout;
+	import flash.utils.setTimeout;
 
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
 
 	import spine.Skeleton;
 	import spine.SkeletonData;
+	import spine.animation.Animation;
 	import spine.animation.AnimationState;
 	import spine.attachments.BoundingBoxAttachment;
 	import spine.starling.SkeletonAnimation;
@@ -18,6 +21,8 @@ package demos {
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
+	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
 
 	public class HitTestDemo1 extends DemoBase {
@@ -34,6 +39,9 @@ package demos {
 			"default" : {scale:1.0, pos:{x:420, y:250}}
 		};
 		private var _assetName:String;
+		private var _textField1:TextField;
+		private var _tid:uint;
+		private var _hits:Array = [];
 
 		public function HitTestDemo1(assetManager:AssetManager, starling:Starling = null) {
 			super(assetManager, starling);
@@ -66,13 +74,15 @@ package demos {
 
 			_skeletonAnimation = new SkeletonAnimation(_skeletonData, true);
 			sp.addChild(_skeletonAnimation);
+			sp.touchGroup = true;
+			sp.touchable = false;
 
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
 			trace("animations:", _skeletonData.animations);
 			trace("slots:",_skeletonData.slots);
 
-			var tween:Tween = new Tween(sp, 0.5);
+			var tween:Tween = new Tween(null, 0.0);
 			Starling.juggler.add(_skeletonAnimation);
 
 			_animationState.addAnimation(0, _skeletonData.findAnimation("guruguru"), true, 0);
@@ -80,32 +90,66 @@ package demos {
 
 			_skeletonAnimation.touchable = false;
 
-			var bb:BoundingBoxAttachment = _skeleton.findSlot("hitArea1").attachment as BoundingBoxAttachment;
-			for (var i:int=0;i<bb.vertices.length;i+=2) {
-				var quad:Quad = new Quad(4, 4, 0xffff0000);
-				quad.pivotX = 2;
-				quad.pivotY = 2;
-				quad.x = bb.vertices[i];
-				quad.y = bb.vertices[i+1];
-				quad.rotation = Math.PI / 8;
-				sp.addChild(quad);
-			}
+			_showInfo("Touch character!");
 
 			bg.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
+
 				var touch:Touch = ev.getTouch(self, TouchPhase.ENDED);
+
 				if(touch) {
-					var hit:Boolean =  _hitTest(touch.globalX, touch.globalY, ["hitArea1"]); // "armR", "armL"
-					if(hit) {
+
+					_hits.length = 0;
+
+					var gx:Number = touch.globalX;
+					var gy:Number = touch.globalY;
+
+					if(_hitTest(gx, gy, ["hitAreaEyes"])) {
+						_hits.push("eyes");
+					} else if(_hitTest(gx, gy, ["tie"])) {
+						_hits.push("tie");
+						_animationState.addAnimation(2, _skeletonData.findAnimation("tie"), false, 0);
+					} else if(_hitTest(gx, gy, ["ribon"])) {
+						_hits.push("ribon");
+						_animationState.addAnimation(2, _skeletonData.findAnimation("tie"), false, 0);
+					} else if(_hitTest(gx, gy, ["armR", "armL"])) {
+						_hits.push("arms");
+					}
+
+					if(_hitTest(gx, gy, ["hitAreaBody"])) {
+						_hits.push("body");
 						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
-					}else {
+					}
+
+					//背景のタッチは移動
+					if(_hits.length==0) {
 						touch.getLocation(self, sPoint);
-						tween.reset(sp, 0.5, Transitions.EASE_OUT);
+						tween.reset(sp, 1.0, Transitions.EASE_OUT);
 						tween.moveTo(sPoint.x, sPoint.y);
 						Starling.juggler.add(tween);
+					} else {
+						_showInfo("Touched : " + _hits.join(" and ") + " !");
 					}
+
 				}
 			});
 
+		}
+
+		private function _showInfo(info:String):void {
+
+			if(!_textField1) {
+				_textField1 = new TextField(800, 30, "");
+				_textField1.x = 20;
+				_textField1.y = 550;
+				_textField1.autoSize = TextFieldAutoSize.BOTH_DIRECTIONS;
+				addChild(_textField1);
+			}
+
+			_textField1.text = info;
+			clearTimeout(_tid);
+			_tid = setTimeout(function():void{
+				_textField1.text = "";
+			},4000);
 		}
 
 		private function _hitTest(globalX:Number, globalY:Number, slotNames:Array):Boolean {

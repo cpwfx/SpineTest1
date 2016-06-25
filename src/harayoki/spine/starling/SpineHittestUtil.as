@@ -87,11 +87,11 @@ package harayoki.spine.starling {
 			var maxX:Number = -Number.MAX_VALUE, maxY:Number = -Number.MAX_VALUE;
 			verticesLen = verticesLen == -1 ? vertices.length : verticesLen;
 			for (var ii:int = 0; ii < verticesLen; ii += 2) {
-				var x:Number = vertices[ii], y:Number = vertices[ii + 1];
-				minX = minX < x ? minX : x;
-				minY = minY < y ? minY : y;
-				maxX = maxX > x ? maxX : x;
-				maxY = maxY > y ? maxY : y;
+				var xx:Number = vertices[ii], yy:Number = vertices[ii + 1];
+				minX = minX < xx ? minX : xx;
+				minY = minY < yy ? minY : yy;
+				maxX = maxX > xx ? maxX : xx;
+				maxY = maxY > yy ? maxY : yy;
 			}
 
 			var temp:Number;
