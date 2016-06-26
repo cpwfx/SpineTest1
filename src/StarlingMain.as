@@ -1,5 +1,6 @@
 package {
     import demos.DemoBase;
+    import demos.FilterDemo1;
     import demos.GoghDemo1;
     import demos.HitTestDemo1;
 
@@ -19,7 +20,7 @@ package {
             _assetManager.verbose = true;
 
             var assets:Array = [];
-            _demo = new HitTestDemo1(_assetManager, Starling.current);
+            _demo = new FilterDemo1(_assetManager, Starling.current);
             _demo.addAssets(assets);
             addChild(_demo);
 
