@@ -17,7 +17,7 @@ package harayoki.spine.starling {
 	import starling.display.DisplayObject;
 	import starling.utils.VertexData;
 
-	public class MySkeletonAnimation extends SkeletonAnimation {
+	public class SkeletonAnimationFilterApplicable extends SkeletonAnimation {
 
 		private static var _tempPoint:Point = new Point();
 		private static var _tempMatrix:Matrix = new Matrix();
@@ -28,7 +28,7 @@ package harayoki.spine.starling {
 		private var _fixedBounds:Rectangle;
 		private var _fixedVertexData:VertexData;
 
-		public function MySkeletonAnimation(skeletonData:SkeletonData, renderMeshes:Boolean = true, stateData:AnimationStateData = null) {
+		public function SkeletonAnimationFilterApplicable(skeletonData:SkeletonData, renderMeshes:Boolean = true, stateData:AnimationStateData = null) {
 			_fixedVertexData = new VertexData(4);
 			super(skeletonData, renderMeshes, stateData);
 		}

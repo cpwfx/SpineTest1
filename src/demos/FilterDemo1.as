@@ -4,7 +4,7 @@ package demos {
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 
-	import harayoki.spine.starling.MySkeletonAnimation;
+	import harayoki.spine.starling.SkeletonAnimationFilterApplicable;
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
 
@@ -36,7 +36,7 @@ package demos {
 
 		private static var sPoint:Point = new Point();
 
-		private var _skeletonAnimation:MySkeletonAnimation;
+		private var _skeletonAnimation:SkeletonAnimationFilterApplicable;
 		private var _skeletonData:SkeletonData;
 		private var _skeleton:Skeleton;
 		private var _animationState:AnimationState;
@@ -79,7 +79,7 @@ package demos {
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
-			_skeletonAnimation = new MySkeletonAnimation(_skeletonData);
+			_skeletonAnimation = new SkeletonAnimationFilterApplicable(_skeletonData);
 			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320));
 			_skeletonAnimation.updateBounds(40, 40);
 			sp.addChild(_skeletonAnimation);
