@@ -79,10 +79,12 @@ package demos {
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
-			_skeletonAnimation = new MySkeletonAnimation(_skeletonData, new flash.geom.Rectangle(-160, -160, 320, 320));
+			_skeletonAnimation = new MySkeletonAnimation(_skeletonData);
+			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320));
+			_skeletonAnimation.updateBounds(40, 40);
 			sp.addChild(_skeletonAnimation);
 			sp.touchGroup = true;
-			sp.touchable = true;
+			sp.touchable = false;
 
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
@@ -97,24 +99,30 @@ package demos {
 
 			_skeletonAnimation.touchable = true;
 
-			_skeletonAnimation.filter = new BlurFilter(4,1);
+			_skeletonAnimation.filter = BlurFilter.createDropShadow(20, 0.785, 0x003333);
 
 			_showInfo("Touch character!");
 
+			var p:Point = new Point();
 			bg.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
-				var bgTouch:Touch = ev.getTouch(bg, TouchPhase.ENDED);
-				var skeletonTouch:Touch = ev.getTouch(sp, TouchPhase.ENDED);
-				trace(bgTouch, skeletonTouch);
-				if(skeletonTouch) {
-					_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
-					_showInfo("Touched ");
-				} else if(bgTouch) {
-					//背景のタッチは移動
-					_showInfo("Touched : outside");
-					bgTouch.getLocation(self, sPoint);
-					tween.reset(sp, 1.0, Transitions.EASE_OUT);
-					tween.moveTo(sPoint.x, sPoint.y);
-					Starling.juggler.add(tween);
+				var touch:Touch = ev.getTouch(bg, TouchPhase.ENDED);
+
+
+				if(touch) {
+
+					p.setTo(touch.globalX, touch.globalY);
+					if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(
+							_skeletonAnimation, "hitAreaBody", p)) {
+						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
+						_showInfo("Touched ");
+					} else {
+						//背景のタッチは移動
+						_showInfo("Touched : outside");
+						touch.getLocation(self, sPoint);
+						tween.reset(sp, 1.0, Transitions.EASE_OUT);
+						tween.moveTo(sPoint.x, sPoint.y);
+						Starling.juggler.add(tween);
+					}
 				}
 			});
 
