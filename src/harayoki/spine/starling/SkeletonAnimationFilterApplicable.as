@@ -162,7 +162,6 @@ package harayoki.spine.starling {
 					resultRect.y -= resultRect.height;
 				}
 			} else if (is3D && stage) {
-				// not tested yet
 				stage.getCameraPosition(targetSpace, _tempPoint3D);
 				getTransformationMatrix3D(targetSpace, _tempMatrix3D);
 				_fixedVertexData.getBoundsProjected(_tempMatrix3D, _tempPoint3D, 0, 4, resultRect);

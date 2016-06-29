@@ -1,6 +1,5 @@
 package demos {
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 
@@ -10,20 +9,13 @@ package demos {
 
 	import spine.Skeleton;
 	import spine.SkeletonData;
-	import spine.Slot;
 	import spine.animation.AnimationState;
-	import spine.attachments.Attachment;
-	import spine.attachments.BoundingBoxAttachment;
-	import spine.attachments.FfdAttachment;
-	import spine.attachments.MeshAttachment;
-	import spine.attachments.RegionAttachment;
-	import spine.attachments.WeightedMeshAttachment;
 
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.display.Quad;
-	import starling.display.Sprite;
+	import starling.display.Sprite3D;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -72,16 +64,18 @@ package demos {
 			bg.touchable = true;
 			addChild(bg);
 
-			var sp:Sprite = new Sprite();
+			var sp:Sprite3D = new Sprite3D();
 			sp.x = pos.x;
 			sp.y = pos.y;
+			//sp.rotationX = 0.3;
+			//sp.rotationY = 0.3;
+			//stage.fieldOfView = Math.PI*0.75;
 			addChild(sp);
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
 			_skeletonAnimation = new SkeletonAnimationFilterApplicable(_skeletonData);
-			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320));
-			// _skeletonAnimation.updateBounds(40, 40);
+			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320)); 
 			sp.addChild(_skeletonAnimation);
 			sp.touchGroup = true;
 			sp.touchable = false;
@@ -95,13 +89,14 @@ package demos {
 			Starling.juggler.add(_skeletonAnimation);
 
 			_animationState.timeScale = 1.0;
-			_animationState.addAnimation(0, _skeletonData.findAnimation("guruguru"), true, 0);
+			_animationState.addAnimationByName(0, "guruguru", true, 0);
+			 _skeletonAnimation.updateBounds(40, 40); // recommended after changing animation
 
 			_skeletonAnimation.touchable = true;
 
 			_skeletonAnimation.filter = BlurFilter.createDropShadow(20, 0.785, 0x003333);
 
-			_showInfo("Touch character!");
+			_showInfo("Touch character body!");
 
 			var p:Point = new Point();
 			bg.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
