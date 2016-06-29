@@ -28,9 +28,24 @@ package harayoki.spine.starling {
 		private var _fixedBounds:Rectangle;
 		private var _fixedVertexData:VertexData;
 
-		public function SkeletonAnimationFilterApplicable(skeletonData:SkeletonData, renderMeshes:Boolean = true, stateData:AnimationStateData = null) {
-			_fixedVertexData = new VertexData(4);
+		/**
+		 * フィルタが適用できる(=boundsをある程度正しく返すSkeletonAnimation)
+		 * @param skeletonData SkeletonData
+		 * @param renderMeshes メッシュ描画するか
+		 * @param stateData StatrData
+		 * @param autoBoundsInit 自動でフィルタ領域を計算するか
+		 */
+		public function SkeletonAnimationFilterApplicable(
+			skeletonData:SkeletonData,
+			renderMeshes:Boolean = true,
+			stateData:AnimationStateData = null,
+			autoBoundsInit:Boolean=true
+		) {
 			super(skeletonData, renderMeshes, stateData);
+			_fixedVertexData = new VertexData(4);
+			if(autoBoundsInit) {
+				updateBounds(10, 10);
+			}
 		}
 
 		public override function dispose():void {

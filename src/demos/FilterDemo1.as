@@ -81,7 +81,7 @@ package demos {
 
 			_skeletonAnimation = new SkeletonAnimationFilterApplicable(_skeletonData);
 			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320));
-			_skeletonAnimation.updateBounds(40, 40);
+			// _skeletonAnimation.updateBounds(40, 40);
 			sp.addChild(_skeletonAnimation);
 			sp.touchGroup = true;
 			sp.touchable = false;
