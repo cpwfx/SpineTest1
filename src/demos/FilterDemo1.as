@@ -6,6 +6,7 @@ package demos {
 	import harayoki.spine.starling.SkeletonAnimationFilterApplicable;
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
+	import harayoki.starling2.filters.PosterizationFilter;
 	import harayoki.starling2.filters.ScanLineFilter;
 	import harayoki.starling2.filters.SlashShadedFilter;
 	
@@ -23,6 +24,7 @@ package demos {
 	import starling.events.TouchPhase;
 	import starling.filters.DropShadowFilter;
 	import starling.filters.FilterChain;
+	import starling.filters.FragmentFilter;
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
@@ -96,30 +98,51 @@ package demos {
 
 			_skeletonAnimation.touchable = true;
 
-			_skeletonAnimation.filter = new FilterChain(
+			var scanLineFilter:ScanLineFilter = new ScanLineFilter(2, 0, 1, 0x000000, 0.7);
+			scanLineFilter.timeScale = 1.0;
+			Starling.juggler.add(scanLineFilter);
+			var slashShadedFilter:SlashShadedFilter = new SlashShadedFilter(8, 0, 0.1);
+			slashShadedFilter.timeScale = -2.0;
+			Starling.juggler.add(slashShadedFilter);
+			
+			var filter1:FilterChain = new FilterChain(
 				new DropShadowFilter(20, 0.785, 0x003333),
-				new ScanLineFilter(2, 0, 1, 0x000000, 0.7)
+				scanLineFilter
 			);
+			var filter2:FilterChain = new FilterChain(
+				new PosterizationFilter(),
+				slashShadedFilter
+			);
+			_skeletonAnimation.filter = filter1;
+			
+			var filters:Vector.<FragmentFilter> = new <FragmentFilter>[filter1, filter2, null];
 
-			_showInfo("Touch character body!");
+			_showInfo("Touch character to change filter effect.");
 
+			var touchCount:int = 0;
 			var p:Point = new Point();
 			bg.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
 				var touch:Touch;
 				touch = ev.getTouch(bg, TouchPhase.ENDED);
 				
 				if(touch) {
-
+					
 					p.setTo(touch.globalX, touch.globalY);
 					if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(_skeletonAnimation, "hitAreaBody", p)) {
 						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
 						_showInfo("Touched ");
+						
+						touchCount++;
+						_skeletonAnimation.filter = filters[(touchCount % 3)];
+						
+						
 					} else {
 						_showInfo("Touched : outside");
 						touch.getLocation(self, sPoint);
 						tween.reset(sp, 1.0, Transitions.EASE_OUT);
 						tween.moveTo(sPoint.x, sPoint.y);
 						Starling.juggler.add(tween);
+						
 					}
 				}
 				
