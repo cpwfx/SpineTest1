@@ -5,6 +5,7 @@ package {
 	import demos.HitTestDemo1;
 	import demos.RaptorDemo;
 	import demos.ScriptDemo1;
+	import demos.TankDemo;
 	
 	import starling.core.Starling;
     import starling.display.Sprite;
@@ -26,6 +27,7 @@ package {
 			_demo = new HitTestDemo1(_assetManager, Starling.current);
 			_demo = new FilterDemo1(_assetManager, Starling.current);
 			_demo = new GoghDemo1(_assetManager, Starling.current);
+			_demo = new TankDemo(_assetManager, Starling.current);
 			_demo.addAssets(assets);
             addChild(_demo);
 
