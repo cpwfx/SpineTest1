@@ -6,6 +6,8 @@ package demos {
 	import harayoki.spine.starling.SkeletonAnimationFilterApplicable;
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
+	import harayoki.starling2.filters.ScanLineFilter;
+	import harayoki.starling2.filters.SlashShadedFilter;
 	
 	import spine.Skeleton;
 	import spine.SkeletonData;
@@ -20,6 +22,7 @@ package demos {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.filters.DropShadowFilter;
+	import starling.filters.FilterChain;
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
@@ -88,12 +91,15 @@ package demos {
 			var tween:Tween = new Tween(null, 0.0);
 			Starling.juggler.add(_skeletonAnimation);
 
-			_animationState.timeScale = 1.0;
+			_animationState.timeScale = 0.5;
 			_animationState.addAnimationByName(0, "guruguru", true, 0);
 
 			_skeletonAnimation.touchable = true;
 
-			_skeletonAnimation.filter = new DropShadowFilter(20, 0.785, 0x003333);
+			_skeletonAnimation.filter = new FilterChain(
+				new DropShadowFilter(20, 0.785, 0x003333),
+				new ScanLineFilter(2, 0, 1, 0x000000, 0.7)
+			);
 
 			_showInfo("Touch character body!");
 
