@@ -1,19 +1,19 @@
 
 gogh.png
-size: 985,634
+size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Gogh_bg
   rotate: false
-  xy: 1, 1
+  xy: 2, 2
   size: 522, 632
   orig: 522, 632
   offset: 0, 0
   index: -1
 Gogh_person
   rotate: false
-  xy: 525, 1
+  xy: 526, 93
   size: 459, 541
   orig: 459, 541
   offset: 0, 0
