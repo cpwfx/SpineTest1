@@ -6,6 +6,7 @@ package {
 	import demos.RaptorDemo;
 	import demos.ScriptDemo1;
 	import demos.TankDemo;
+	import demos.VineDemo;
 	
 	import starling.core.Starling;
     import starling.display.Sprite;
@@ -28,6 +29,7 @@ package {
 			_demo = new FilterDemo1(_assetManager, Starling.current);
 			_demo = new GoghDemo1(_assetManager, Starling.current);
 			_demo = new TankDemo(_assetManager, Starling.current);
+			_demo = new VineDemo(_assetManager, Starling.current);
 			_demo.addAssets(assets);
             addChild(_demo);
 
