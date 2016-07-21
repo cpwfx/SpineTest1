@@ -47,7 +47,7 @@ package demos {
             json.scale = 0.5;
             var skeletonData:SkeletonData = json.readSkeletonData(skeletonJson);
 
-            _skeleton1 = new SkeletonAnimation(skeletonData, true);
+            _skeleton1 = new SkeletonAnimation(skeletonData);
             _skeleton1.x = 180;
             _skeleton1.y = 520;
             _skeleton1.scaleX = _skeleton1.scaleY = 0.5;
@@ -55,7 +55,7 @@ package demos {
             addChild(_skeleton1);
             Starling.juggler.add(_skeleton1);
 
-            _skeleton2 = new SkeletonAnimation(skeletonData, true);
+            _skeleton2 = new SkeletonAnimation(skeletonData);
             _skeleton2.x = 560;
             _skeleton2.y = 540;
             _skeleton2.scaleX = _skeleton2.scaleY = 1.0;

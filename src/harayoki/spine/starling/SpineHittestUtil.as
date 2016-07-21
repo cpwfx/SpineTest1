@@ -1,14 +1,14 @@
 package harayoki.spine.starling {
 	import flash.geom.Point;
-
+	
 	import spine.Slot;
 	import spine.attachments.Attachment;
 	import spine.attachments.BoundingBoxAttachment;
 	import spine.attachments.MeshAttachment;
+	import spine.attachments.PathAttachment;
 	import spine.attachments.RegionAttachment;
-	import spine.attachments.WeightedMeshAttachment;
 	import spine.starling.SkeletonSprite;
-
+	
 	public class SpineHitTestUtil {
 		
 		private static var sVertices:Vector.<Number> = new <Number>[];
@@ -28,7 +28,8 @@ package harayoki.spine.starling {
 		 * - RegionAttachment(画像) 推奨
 		 * - BoundingBoxAttachment(多角形) 推奨
 		 * - MeshAttachment(メッシュ) 大雑把な処理
-		 * - WeightedMeshAttachment(メッシュ) 大雑把な処理
+		 * 対応していないアタッチメント
+		 * - PathAttachment(パス) TODO できる事あるか確認
 		 */
 		public static function hitTestWithAttachmentByLocalPoint(sprite:SkeletonSprite, slotName:String, localPoint:Point):Boolean {
 
@@ -51,7 +52,7 @@ package harayoki.spine.starling {
 				var bounding:BoundingBoxAttachment = BoundingBoxAttachment(slot.attachment);
 				verticesLength = bounding.vertices.length;
 				if (worldVertices.length < verticesLength) worldVertices.length = verticesLength;
-				bounding.computeWorldVertices(0, 0, slot.bone, worldVertices);
+				bounding.computeWorldVertices(slot, worldVertices);
 
 				return crossingNumberAlgorithmHitTest(localPoint.x, localPoint.y, worldVertices, verticesLength);
 			}
@@ -60,19 +61,13 @@ package harayoki.spine.starling {
 				var mesh:MeshAttachment = MeshAttachment(attachment);
 				verticesLength = mesh.vertices.length;
 				if (worldVertices.length < verticesLength) worldVertices.length = verticesLength;
-				mesh.computeWorldVertices(0, 0, slot, worldVertices);
+				mesh.computeWorldVertices(slot, worldVertices);
 
 				return minMaxHitTest(localPoint.x, localPoint.y, worldVertices, verticesLength);
 			}
 
-			if (attachment is WeightedMeshAttachment) {
-				var weightedMesh:WeightedMeshAttachment = WeightedMeshAttachment(attachment);
-				verticesLength = weightedMesh.uvs.length;
-				if (worldVertices.length < verticesLength) worldVertices.length = verticesLength;
-				weightedMesh.computeWorldVertices(0, 0, slot, worldVertices);
-
-				return minMaxHitTest(localPoint.x, localPoint.y, worldVertices, verticesLength);
-
+			if (attachment is PathAttachment) {
+				// TODO
 			}
 
 			return false;

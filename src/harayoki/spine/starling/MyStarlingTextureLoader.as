@@ -2,10 +2,11 @@ package harayoki.spine.starling {
     import spine.atlas.AtlasPage;
     import spine.atlas.AtlasRegion;
     import spine.atlas.TextureLoader;
-    import spine.starling.SkeletonImage;
-
+    
+    import starling.display.Image;
+    
     import starling.textures.Texture;
-
+    
     public class MyStarlingTextureLoader implements TextureLoader {
 
         private var _singleTexture:Texture;
@@ -41,17 +42,17 @@ package harayoki.spine.starling {
     }
 
     public function loadRegion (region:AtlasRegion) : void {
-        var image:SkeletonImage = new SkeletonImage(Texture(region.page.rendererObject));
+        var image:Image = new Image(Texture(region.page.rendererObject));
         if (region.rotate) {
-            image.setTexCoordsTo(0, region.u, region.v2);
-            image.setTexCoordsTo(1, region.u, region.v);
-            image.setTexCoordsTo(2, region.u2, region.v2);
-            image.setTexCoordsTo(3, region.u2, region.v);
+            image.setTexCoords(0, region.u, region.v2);
+            image.setTexCoords(1, region.u, region.v);
+            image.setTexCoords(2, region.u2, region.v2);
+            image.setTexCoords(3, region.u2, region.v);
         } else {
-            image.setTexCoordsTo(0, region.u, region.v);
-            image.setTexCoordsTo(1, region.u2, region.v);
-            image.setTexCoordsTo(2, region.u, region.v2);
-            image.setTexCoordsTo(3, region.u2, region.v2);
+            image.setTexCoords(0, region.u, region.v);
+            image.setTexCoords(1, region.u2, region.v);
+            image.setTexCoords(2, region.u, region.v2);
+            image.setTexCoords(3, region.u2, region.v2);
         }
         region.rendererObject = image;
     }

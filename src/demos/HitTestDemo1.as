@@ -2,22 +2,21 @@ package demos {
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
-
+	
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
-
+	
 	import spine.Skeleton;
 	import spine.SkeletonData;
 	import spine.Slot;
 	import spine.animation.AnimationState;
 	import spine.attachments.Attachment;
 	import spine.attachments.BoundingBoxAttachment;
-	import spine.attachments.FfdAttachment;
 	import spine.attachments.MeshAttachment;
+	import spine.attachments.PathAttachment;
 	import spine.attachments.RegionAttachment;
-	import spine.attachments.WeightedMeshAttachment;
 	import spine.starling.SkeletonAnimation;
-
+	
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -29,7 +28,7 @@ package demos {
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
-
+	
 	public class HitTestDemo1 extends DemoBase {
 
 		private static var sPoint:Point = new Point();
@@ -77,7 +76,7 @@ package demos {
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
-			_skeletonAnimation = new SkeletonAnimation(_skeletonData, true);
+			_skeletonAnimation = new SkeletonAnimation(_skeletonData);
 			sp.addChild(_skeletonAnimation);
 			sp.touchGroup = true;
 			sp.touchable = false;
@@ -92,17 +91,14 @@ package demos {
 					if(attachment is MeshAttachment) {
 						type = "MeshAttachment";
 					}
-					else if(attachment is WeightedMeshAttachment) {
-						type = "WeightedMeshAttachment";
-					}
 					else if(attachment is RegionAttachment) {
 						type = "RegionAttachment";
 					}
 					else if(attachment is BoundingBoxAttachment) {
 						type = "BoundingBoxAttachment";
 					}
-					else if(attachment is FfdAttachment) { // これはなんだ？
-						type = "FfdAttachment";
+					else if(attachment is PathAttachment) {
+						type = "PathAttachment";
 					}
 					trace("slot:"+slot, "("+type+"):"+attachment);
 				}

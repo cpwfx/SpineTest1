@@ -35,7 +35,7 @@ package demos {
 		private var _skeleton:Skeleton;
 		private var _animationState:AnimationState;
 
-		private var _assetNames:Array = ["mecha", "goblins-mesh", "spineboy", "girl"]; //"raptor",
+		private var _assetNames:Array = ["goblins-mesh", "spineboy", "girl"]; // , "raptor"
 		private var _infos:Object = {
 			"goblins-mesh" : {scale:1.0, pos:{x:420, y:480}},
 			"spineboy" : {scale:0.5, pos:{x:420, y:480}},
@@ -191,7 +191,7 @@ package demos {
 		}
 
 		private function _addSkeletonAnimation(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
-			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true);
+			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData);
 			skeletonAnimation.x = xx;
 			skeletonAnimation.y = yy;
 			addChild(skeletonAnimation);

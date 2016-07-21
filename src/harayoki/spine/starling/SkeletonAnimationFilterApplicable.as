@@ -4,21 +4,24 @@ package harayoki.spine.starling {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
-
+	
 	import spine.SkeletonData;
 	import spine.Slot;
 	import spine.animation.AnimationStateData;
 	import spine.attachments.Attachment;
 	import spine.attachments.MeshAttachment;
+	import spine.attachments.PathAttachment;
 	import spine.attachments.RegionAttachment;
-	import spine.attachments.WeightedMeshAttachment;
 	import spine.starling.SkeletonAnimation;
-
+	
 	import starling.display.DisplayObject;
-	import starling.utils.VertexData;
-
+	import starling.rendering.VertexData;
+	import starling.rendering.VertexDataFormat;
+	
 	public class SkeletonAnimationFilterApplicable extends SkeletonAnimation {
 
+		private static const ATTR_NAME:String = "position";
+		
 		private static var _tempPoint:Point = new Point();
 		private static var _tempMatrix:Matrix = new Matrix();
 		private static var _tempMatrix3D:Matrix3D = new Matrix3D();
@@ -37,12 +40,11 @@ package harayoki.spine.starling {
 		 */
 		public function SkeletonAnimationFilterApplicable(
 			skeletonData:SkeletonData,
-			renderMeshes:Boolean = true,
 			stateData:AnimationStateData = null,
 			autoBoundsInit:Boolean=true
 		) {
-			super(skeletonData, renderMeshes, stateData);
-			_fixedVertexData = new VertexData(4);
+			super(skeletonData, stateData);
+			_fixedVertexData = new VertexData(VertexDataFormat.fromString("position:float2"), 4);
 			if(autoBoundsInit) {
 				updateBounds(10, 10);
 			}
@@ -63,15 +65,15 @@ package harayoki.spine.starling {
 
 		private function _updateVertexData(): void {
 			if(_fixedBounds) {
-				_fixedVertexData.setPosition(0, _fixedBounds.x, _fixedBounds.y);
-				_fixedVertexData.setPosition(1, _fixedBounds.right, _fixedBounds.y);
-				_fixedVertexData.setPosition(2, _fixedBounds.x, _fixedBounds.bottom);
-				_fixedVertexData.setPosition(3, _fixedBounds.right, _fixedBounds.bottom);
+				_fixedVertexData.setPoint(0, ATTR_NAME, _fixedBounds.x, _fixedBounds.y);
+				_fixedVertexData.setPoint(1, ATTR_NAME, _fixedBounds.right, _fixedBounds.y);
+				_fixedVertexData.setPoint(2, ATTR_NAME, _fixedBounds.x, _fixedBounds.bottom);
+				_fixedVertexData.setPoint(3, ATTR_NAME, _fixedBounds.right, _fixedBounds.bottom);
 			} else {
-				_fixedVertexData.setPosition(0, 0, 0);
-				_fixedVertexData.setPosition(1, 0, 0);
-				_fixedVertexData.setPosition(2, 0, 0);
-				_fixedVertexData.setPosition(3, 0, 0);
+				_fixedVertexData.setPoint(0, ATTR_NAME, 0, 0);
+				_fixedVertexData.setPoint(1, ATTR_NAME, 0, 0);
+				_fixedVertexData.setPoint(2, ATTR_NAME, 0, 0);
+				_fixedVertexData.setPoint(3, ATTR_NAME, 0, 0);
 			}
 		}
 
@@ -93,14 +95,15 @@ package harayoki.spine.starling {
 					var mesh:MeshAttachment = MeshAttachment(attachment);
 					verticesLength = mesh.vertices.length;
 					if (worldVertices.length < verticesLength) worldVertices.length = verticesLength;
-					mesh.computeWorldVertices(0, 0, slot, worldVertices);
-				} else if (attachment is WeightedMeshAttachment) {
-					var weightedMesh:WeightedMeshAttachment = WeightedMeshAttachment(attachment);
-					verticesLength = weightedMesh.uvs.length;
-					if (worldVertices.length < verticesLength) worldVertices.length = verticesLength;
-					weightedMesh.computeWorldVertices(0, 0, slot, worldVertices);
-				} else
+					mesh.computeWorldVertices(slot, worldVertices);
+				} else if (attachment is PathAttachment) {
+					var pathAttachment:PathAttachment = PathAttachment(attachment);
+					// TODO できる事あるか確認
 					continue;
+				} else {
+					continue;
+				}
+				
 				for (var ii:int = 0; ii < verticesLength; ii += 2) {
 					var x:Number = worldVertices[ii], y:Number = worldVertices[ii + 1];
 					minX = minX < x ? minX : x;
@@ -164,10 +167,11 @@ package harayoki.spine.starling {
 			} else if (is3D && stage) {
 				stage.getCameraPosition(targetSpace, _tempPoint3D);
 				getTransformationMatrix3D(targetSpace, _tempMatrix3D);
-				_fixedVertexData.getBoundsProjected(_tempMatrix3D, _tempPoint3D, 0, 4, resultRect);
+				
+				_fixedVertexData.getBoundsProjected(ATTR_NAME, _tempMatrix3D, _tempPoint3D, 0, 4, resultRect);
 			} else {
 				getTransformationMatrix(targetSpace, _tempMatrix);
-				_fixedVertexData.getBounds(_tempMatrix, 0, 4, resultRect);
+				_fixedVertexData.getBounds(ATTR_NAME, _tempMatrix, 0, 4, resultRect);
 			}
 
 			return resultRect;

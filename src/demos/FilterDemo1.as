@@ -2,15 +2,15 @@ package demos {
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
-
+	
 	import harayoki.spine.starling.SkeletonAnimationFilterApplicable;
 	import harayoki.spine.starling.SpineHitTestUtil;
 	import harayoki.spine.starling.SpineUtil;
-
+	
 	import spine.Skeleton;
 	import spine.SkeletonData;
 	import spine.animation.AnimationState;
-
+	
 	import starling.animation.Transitions;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -19,11 +19,11 @@ package demos {
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-	import starling.filters.BlurFilter;
+	import starling.filters.DropShadowFilter;
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
-
+	
 	public class FilterDemo1 extends DemoBase {
 
 		private static var sPoint:Point = new Point();
@@ -67,15 +67,15 @@ package demos {
 			var sp:Sprite3D = new Sprite3D();
 			sp.x = pos.x;
 			sp.y = pos.y;
-			//sp.rotationX = 0.3;
-			//sp.rotationY = 0.3;
-			//stage.fieldOfView = Math.PI*0.75;
+			sp.rotationX = 0.3;
+			sp.rotationY = 0.3;
+			stage.fieldOfView = Math.PI*0.6;
 			addChild(sp);
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
 			_skeletonAnimation = new SkeletonAnimationFilterApplicable(_skeletonData);
-			// _skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320)); 
+			_skeletonAnimation.setBoundsDirectly(new flash.geom.Rectangle(-160, -160, 320, 320));
 			sp.addChild(_skeletonAnimation);
 			sp.touchGroup = true;
 			sp.touchable = false;
@@ -90,28 +90,25 @@ package demos {
 
 			_animationState.timeScale = 1.0;
 			_animationState.addAnimationByName(0, "guruguru", true, 0);
-			 _skeletonAnimation.updateBounds(40, 40); // recommended after changing animation
 
 			_skeletonAnimation.touchable = true;
 
-			_skeletonAnimation.filter = BlurFilter.createDropShadow(20, 0.785, 0x003333);
+			_skeletonAnimation.filter = new DropShadowFilter(20, 0.785, 0x003333);
 
 			_showInfo("Touch character body!");
 
 			var p:Point = new Point();
 			bg.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
-				var touch:Touch = ev.getTouch(bg, TouchPhase.ENDED);
-
-
+				var touch:Touch;
+				touch = ev.getTouch(bg, TouchPhase.ENDED);
+				
 				if(touch) {
 
 					p.setTo(touch.globalX, touch.globalY);
-					if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(
-							_skeletonAnimation, "hitAreaBody", p)) {
+					if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(_skeletonAnimation, "hitAreaBody", p)) {
 						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
 						_showInfo("Touched ");
 					} else {
-						//背景のタッチは移動
 						_showInfo("Touched : outside");
 						touch.getLocation(self, sPoint);
 						tween.reset(sp, 1.0, Transitions.EASE_OUT);
@@ -119,6 +116,7 @@ package demos {
 						Starling.juggler.add(tween);
 					}
 				}
+				
 			});
 
 		}

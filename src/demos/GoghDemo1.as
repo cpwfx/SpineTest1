@@ -165,7 +165,7 @@ package demos {
 		private function _addSkeletonAnimation(skeletonData:SkeletonData, xx:int, yy:int):SkeletonAnimation {
 			var stateData:AnimationStateData = new AnimationStateData(skeletonData);
 			stateData.defaultMix =  2.0;
-			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, true, stateData);
+			var skeletonAnimation:SkeletonAnimation = new SkeletonAnimation(skeletonData, stateData);
 			skeletonAnimation.x = xx;
 			skeletonAnimation.y = yy;
 			addChild(skeletonAnimation);

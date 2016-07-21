@@ -29,26 +29,26 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-package spine {
+package spine.starling {
+import starling.textures.Texture;
+import starling.styles.MeshStyle;
+import starling.rendering.IndexData;
+import starling.rendering.VertexData;
+import starling.display.Mesh;
 
-public class IkConstraintData {
-	internal var _name:String;
-	public var bones:Vector.<BoneData> = new Vector.<BoneData>();
-	public var target:BoneData;
-	public var bendDirection:int = 1;
-	public var mix:Number = 1;
-
-	public function IkConstraintData (name:String) {
-		if (name == null) throw new ArgumentError("name cannot be null.");
-		_name = name;
+public class SkeletonMesh extends Mesh {
+	
+	public function SkeletonMesh(texture:Texture, vertexData:VertexData = null, indexData:IndexData = null, style:MeshStyle=null) {
+        super(vertexData == null? new VertexData(): vertexData, indexData == null? new IndexData(): indexData, style);
+		this.texture = texture;
+    }
+	
+	public function getVertexData(): VertexData {
+		return this.vertexData;
 	}
-
-	public function get name () : String {
-		return _name;
-	}
-
-	public function toString () : String {
-		return _name;
+	
+	public function getIndexData(): IndexData {
+		return this.indexData;
 	}
 }
 
