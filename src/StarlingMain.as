@@ -6,7 +6,8 @@
 	import demos.RaptorDemo;
 	import demos.ScriptDemo1;
 	import demos.TankDemo;
-	import demos.VineDemo;
+		import demos.UI1Demo1;
+		import demos.VineDemo;
 	
 	import starling.core.Starling;
 	import starling.display.Sprite;
@@ -29,7 +30,8 @@
 			//_demo = new VineDemo(_assetManager, Starling.current);
 			//_demo = new TankDemo(_assetManager, Starling.current);
 			//_demo = new FilterDemo1(_assetManager, Starling.current);
-			_demo = new ScriptDemo1(_assetManager, Starling.current);
+			// _demo = new ScriptDemo1(_assetManager, Starling.current);
+			_demo = new UI1Demo1(_assetManager, Starling.current);
 			_demo.addAssets(assets);
 			addChild(_demo);
 	
