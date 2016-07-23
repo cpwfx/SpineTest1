@@ -24,7 +24,7 @@ package harayoki.spine.starling {
 		}
 		
 		private var _enabled:Boolean = true;
-		private var _touching:Boolean = true;
+		private var _touching:Boolean = false;
 		private var _idolAnimation:ButtonAnimationData;
 		private var _touchStartAnimation:ButtonAnimationData;
 		private var _touchEndAnimation:ButtonAnimationData;
@@ -114,7 +114,10 @@ package harayoki.spine.starling {
 		
 		public function hitTest(globalPos:Point, phase:String):Boolean {
 			if(!_enabled || !hitTestSlot || !_skeletonAnimation.visible) {
-				_touching = false;
+				if(_touching) {
+					_touching = false;
+					_playIdleAnimation();
+				}
 				return false;
 			}
 			if(phase == TouchPhase.MOVED || phase == TouchPhase.STATIONARY) {
