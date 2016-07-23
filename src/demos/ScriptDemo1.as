@@ -35,7 +35,7 @@ package demos {
 		private var _skeleton:Skeleton;
 		private var _animationState:AnimationState;
 
-		private var _assetNames:Array = ["goblins-mesh", "spineboy", "girl"]; // , "raptor"
+		private var _assetNames:Array = ["goblins-mesh", "spineboy", "girl"]; // , "raptor" "_temp_/ui1",
 		private var _infos:Object = {
 			"goblins-mesh" : {scale:1.0, pos:{x:420, y:480}},
 			"spineboy" : {scale:0.5, pos:{x:420, y:480}},
@@ -45,16 +45,21 @@ package demos {
 			"default" : {scale:0.5, pos:{x:420, y:480}}
 		};
 		private var _assetName:String;
+		private var _assetFolder:String;
 
 		public function ScriptDemo1(assetManager:AssetManager, starling:Starling = null) {
 			super(assetManager, starling);
 			_assetName = _lot(_assetNames) + "";
+			var arr:Array = _assetName.split("/");
+			_assetName = arr.pop();
+			_assetFolder = arr.join("/");
+			_assetFolder = _assetFolder ? _assetFolder + "/" : "";
 		}
 
 		public override function addAssets(assets:Array):void {
-			assets.push("assets/" + _assetName + ".png");
-			assets.push("assets/" + _assetName + ".atlas");
-			assets.push("assets/" + _assetName + ".json");
+			assets.push("assets/" + _assetFolder + _assetName + ".png");
+			assets.push("assets/" + _assetFolder + _assetName + ".atlas");
+			assets.push("assets/" + _assetFolder + _assetName + ".json");
 		}
 
 		public override function start():void {
