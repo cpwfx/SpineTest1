@@ -1,6 +1,8 @@
 package harayoki.spine.starling {
 	import flash.geom.Point;
 	
+	import harayoki.spine.starling.SpineSlotButtonGroup;
+	
 	import spine.Slot;
 	import spine.animation.Listeners;
 	import spine.starling.SkeletonAnimation;
@@ -28,6 +30,7 @@ package harayoki.spine.starling {
 		private var _idolAnimation:ButtonAnimationData;
 		private var _touchStartAnimation:ButtonAnimationData;
 		private var _touchEndAnimation:ButtonAnimationData;
+		private var _group:SpineSlotButtonGroup;
 		
 		public var hitTestSlot:Slot;
 		public var userOption:*;
@@ -38,15 +41,24 @@ package harayoki.spine.starling {
 		 * @param touchEndAnimationName タッチエンド時に再生するアニメーション名
 		 */
 		public function SpineSlotButton(
-			skeletonAnimation:SkeletonAnimation, hitTestSlotName:String, touchEndAnimationName:String=null) {
+			skeletonAnimation:SkeletonAnimation,
+			hitTestSlotName:String,
+			group:SpineSlotButtonGroup=null,
+			touchEndAnimationName:String=null
+		) {
 			_skeletonAnimation = skeletonAnimation;
 			hitTestSlot = _skeletonAnimation.skeleton.findSlot(hitTestSlotName);
 			_onTouchStart = new Listeners();
 			_onTouchEnd = new Listeners();
-			if(!DEFAULT_GROUP) {
-				DEFAULT_GROUP = new SpineSlotButtonGroup();
+			if(group) {
+				_group = group;
+			} else {
+				if(!DEFAULT_GROUP) {
+					DEFAULT_GROUP = new SpineSlotButtonGroup();
+				}
+				_group = DEFAULT_GROUP;
 			}
-			DEFAULT_GROUP.add(this);
+			_group.add(this);
 		}
 		
 		public function dispose():void {
@@ -56,11 +68,16 @@ package harayoki.spine.starling {
 			_idolAnimation = null;
 			_touchStartAnimation = null;
 			_touchEndAnimation = null;
-			DEFAULT_GROUP.remove(this);
+			_group.remove(this);
+			_group = null;
 		}
 		
 		public function toString():String {
 			return "[SpineSlotButton:" + (hitTestSlot ? "#"+hitTestSlot.data.index + " " + hitTestSlot.data.name : 'N/A') + "]";
+		}
+		
+		public function get group():SpineSlotButtonGroup {
+			return _group;
 		}
 		
 		public function get touching():Boolean{
