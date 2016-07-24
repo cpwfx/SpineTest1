@@ -1,4 +1,5 @@
 package demos {
+	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
@@ -15,6 +16,7 @@ package demos {
 	import spine.starling.SkeletonAnimation;
 	
 	import starling.core.Starling;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -81,6 +83,8 @@ package demos {
 			// btn_big_3,home_lp,btn_mini_set_5,btn_big_2,btn_mini_set_4,list_in,contents_lp,home_out,contents_out,
 			// btn_mini_set_2,list_out,btn_mini_set_3,btn_mini_set_1,contents_in,home_in,list_lp,btn_big_1
 			//trace("slots:", _skeleton.slots);
+			// Area_btn_big,Area_btn_mini_set_1,Area_btn_mini_set_2,Area_btn_mini_set_3,Area_btn_mini_set_4,
+			// Area_btn_mini_set_5,Area_btn_big-copy,Area_btn_big-copy2
 			
 			_hitAreaSlots = new <Slot>[];
 			for each(var slot:Slot in _skeleton.slots) {
@@ -91,45 +95,16 @@ package demos {
 			}
 			trace("hitAreaSlots:", _hitAreaSlots);
 			//[trace] hitAreaSlots:
-			// Area_btn_big,Area_btn_mini_set_1,Area_btn_mini_set_2,Area_btn_mini_set_3,Area_btn_mini_set_4,
-			// Area_btn_mini_set_5,Area_btn_big-copy,Area_btn_big-copy2
 			
-			_animationState.timeScale = 1.0;
-			_animationState.addAnimationByName(0, "home_in", false, 0);
-			_animationState.addAnimationByName(0, "home_lp", true, 0);
+			var ui:UiControl = new UiControl(_skeletonAnimation);
 			Starling.juggler.add(_skeletonAnimation);
-
-			_showInfo("UI test");
-
-			var btn:SpineSlotButton;
-			btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big');
-			btn.setTouchStartAnimation('btn_big_1', 1);
-			btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
-				trace(btn);
-			});
-			
-			btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy');
-			btn.setTouchStartAnimation('btn_big_2', 1);
-			btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
-				trace(btn);
-			});
-			
-			btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy2');
-			btn.setTouchStartAnimation('btn_big_3', 1);
-			btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
-				trace(btn);
-			});
-			
 			var p:Point = new Point();
 			
 			stage.addEventListener(TouchEvent.TOUCH, function(ev:TouchEvent):void{
 				var touch:Touch;
 				touch = ev.getTouch(stage, TouchPhase.ENDED);
-				
 				if(touch) {
-					
 					p.setTo(touch.globalX, touch.globalY);
-					
 					for each(var slot:Slot in _hitAreaSlots) {
 						if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(_skeletonAnimation, slot.data.name, p)) {
 							_showInfo("Touched " + slot.data.name);
@@ -138,7 +113,7 @@ package demos {
 				}
 				
 			});
-
+			
 		}
 
 		private function _showInfo(info:String):void {
@@ -159,5 +134,183 @@ package demos {
 			},4000);
 		}
 
+	}
+}
+
+import harayoki.spine.starling.SpineSlotButton;
+import harayoki.spine.starling.SpineSlotButtonGroup;
+
+import spine.animation.AnimationState;
+import spine.animation.TrackEntry;
+import spine.animation.TrackEntry;
+import spine.starling.SkeletonAnimation;
+
+import starling.core.Starling;
+
+class UiControl {
+	private var _state:UiState
+	private var _prevState:UiState
+	private var _skeletonAnimation:SkeletonAnimation;
+	private var _btnGroup:SpineSlotButtonGroup;
+	public var animSlot:int = 0;
+	public var btnSlot:int = 1;
+	
+	public function UiControl(skeletonAnimation:SkeletonAnimation) {
+		_skeletonAnimation = skeletonAnimation;
+		
+		_btnGroup = new SpineSlotButtonGroup();
+		
+		// ,Area_btn_mini_set_2,Area_btn_mini_set_3,Area_btn_mini_set_4,
+		// Area_btn_mini_set_5
+		
+		var btn:SpineSlotButton;
+		
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big', _btnGroup);
+		btn.setTouchStartAnimation('btn_big_1', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+			if(isState(UiState.HOME)) {
+				changeState(UiState.CONTENTS);
+			} else {
+				changeState(UiState.HOME);
+			}
+		});
+		
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy', _btnGroup);
+		btn.setTouchStartAnimation('btn_big_2', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+			changeState(UiState.LIST);
+		});
+		
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy2', _btnGroup);
+		btn.setTouchStartAnimation('btn_big_3', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_1', _btnGroup);
+		btn.setTouchStartAnimation('btn_mini_set_1', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_2', _btnGroup);
+		btn.setTouchStartAnimation('btn_mini_set_2', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_3', _btnGroup);
+		btn.setTouchStartAnimation('btn_mini_set_3', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_4', _btnGroup);
+		btn.setTouchStartAnimation('btn_mini_set_4', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_5', _btnGroup);
+		btn.setTouchStartAnimation('btn_mini_set_5', btnSlot);
+		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
+		});
+		
+		changeState(UiState.HOME);
+		
+		
+	}
+	
+	public function isState(state:UiState):Boolean {
+		return _state == state;
+	}
+	
+	public function changeState(state:UiState):void {
+		var animState:AnimationState = _skeletonAnimation.state;
+		animState.timeScale = 1.0;
+		if (_state == state) {
+			return;
+		}
+		_prevState = _state;
+		_state = state;
+		if (_prevState) {
+			_btnGroup.enabled = false;
+			Starling.juggler.delayCall(_changeState, 0.1); // ボタン演出待ち
+		} else {
+			_playNextStateAnimation();
+		}
+	}
+	
+	private function _changeState():void {
+		trace("_changeState", _prevState , _state);
+		var animState:AnimationState = _skeletonAnimation.state;
+		var track:TrackEntry = animState.setAnimationByName(animSlot, _prevState.outAnimaton, false);
+		track.onEnd = function(slot):void {
+			track.onEnd = null;
+			// コールバック内ですぐ次の処理をするとおかしくなるので1フレ待つ
+			Starling.juggler.delayCall(_playNextStateAnimation, 0);
+		}
+	}
+	
+	private function _playNextStateAnimation():void {
+		trace("_playNextStateAnimation", _state);
+		if(_state) {
+			_btnGroup.enabled = false;
+			var animState:AnimationState = _skeletonAnimation.state;
+			var track:TrackEntry;
+			track = animState.setAnimationByName(animSlot, _state.inAnimaton, false);
+			animState.addAnimationByName(animSlot, _state.loopAnimaton, true, 0);
+			track.onEnd = function(slot:int):void {
+				track.onEnd = null;
+				// 念のため1フレーム待つ
+				Starling.juggler.delayCall(_setUpNextAnimation, 0);
+				_skeletonAnimation.skeleton.setSlotsToSetupPose(); // １フレあとで呼ぶと見えてはいけないパーツがちらっと見える
+			};
+		} else {
+			_btnGroup.enabled = true;
+		}
+	}
+	
+	private function _setUpNextAnimation():void {
+		// setSlotsToSetupPoseを行わないとあたり判定がとれなかった
+		_btnGroup.enabled = true;
+	}
+	
+}
+
+/* アニメーションコールバックメモ
+ AnimationState onEndはイベントリスナー型、コールバックへの引数にスロット番号が渡される
+全部のアニメーションのイベントが来るので、トラック別に処理を分けないといけない
+ TrackEntry onEnd はfunction型、同様にコールバックへの引数にスロット番号が渡される
+ 
+対象スロットだけコールバックが来るので、こちらの方が便利
+ setAnimationByName、addAnimationByNameの戻り値はTrackEntry
+ AnimationState.getCurrent(trakNum)でもTrackEntryがとれる
+ 
+ どちらのイベントでもイベントハンドラ内で次のアニメーション処理を行うとおかしくなるので、１フレーム待ってから処理をした方が良い
+
+ループアニメーションの終了コールバックはAnimationState.onEndに１度目の再生が終了した際につくが
+ 
+ 
+ 
+ */
+
+
+class UiState {
+	
+	public static const HOME:UiState = new UiState("home");
+	public static const CONTENTS:UiState = new UiState("contents");
+	public static const LIST:UiState = new UiState("list");
+	
+	public var id:String;
+	public function UiState(id:String) {
+		this.id = id;
+	}
+	
+	public function toString():String {
+		return "[State:" + id + "]";
+	}
+	
+	public function get inAnimaton():String {
+		return id + "_in";
+	}
+	
+	public function get loopAnimaton():String {
+		return id + "_lp";
+	}
+	
+	public function get outAnimaton():String {
+		return id + "_out";
 	}
 }
