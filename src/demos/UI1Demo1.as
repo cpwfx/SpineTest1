@@ -226,7 +226,7 @@ class UiControl {
 		_state = state;
 		if (_prevState) {
 			_btnGroup.enabled = false;
-			Starling.juggler.delayCall(_changeState, 0.1); // ボタン演出待ち
+			_changeState();
 		} else {
 			_playNextStateAnimation();
 		}
