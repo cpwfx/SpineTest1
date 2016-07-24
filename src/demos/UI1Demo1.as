@@ -1,11 +1,9 @@
 package demos {
-	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
 	import harayoki.spine.starling.SpineHitTestUtil;
-	import harayoki.spine.starling.SpineSlotButton;
 	import harayoki.spine.starling.SpineUtil;
 	
 	import spine.Skeleton;
@@ -16,7 +14,6 @@ package demos {
 	import spine.starling.SkeletonAnimation;
 	
 	import starling.core.Starling;
-	import starling.events.EnterFrameEvent;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -58,13 +55,15 @@ package demos {
 			assets.push("assets/" + _assetFolder + _assetName + ".png");
 			assets.push("assets/" + _assetFolder + _assetName + ".atlas");
 			assets.push("assets/" + _assetFolder + _assetName + ".json");
+			///
+			assets.push("assets/font/font.xml");
+			assets.push("assets/font/font.png");
 		}
 
 		public override function start():void {
-
+			
 			var info:Object = _infos[_assetName] || _infos["default"];
 			var pos:Object = info.pos || {x:0, y:0};
-
 			
 			stage.color = 0xbbbbbb;
 
@@ -122,6 +121,7 @@ package demos {
 				_textField1 = new TextField(800, 30, "");
 				_textField1.x = 20;
 				_textField1.y = 550;
+				// _textField1.format = new TextFormat("font", 32);
 				_textField1.autoSize = TextFieldAutoSize.BOTH_DIRECTIONS;
 				addChild(_textField1);
 			}
@@ -141,7 +141,6 @@ import harayoki.spine.starling.SpineSlotButton;
 import harayoki.spine.starling.SpineSlotButtonGroup;
 
 import spine.animation.AnimationState;
-import spine.animation.TrackEntry;
 import spine.animation.TrackEntry;
 import spine.starling.SkeletonAnimation;
 
