@@ -151,8 +151,8 @@ class UiControl {
 	private var _prevState:UiState
 	private var _skeletonAnimation:SkeletonAnimation;
 	private var _btnGroup:SpineSlotButtonGroup;
-	public var animSlot:int = 0;
-	public var btnSlot:int = 1;
+	public var _mainTrackIndex:int = 0;
+	public var _btnTrackIndex:int = 1;
 	
 	public function UiControl(skeletonAnimation:SkeletonAnimation) {
 		_skeletonAnimation = skeletonAnimation;
@@ -165,7 +165,7 @@ class UiControl {
 		var btn:SpineSlotButton;
 		
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big', _btnGroup);
-		btn.setTouchStartAnimation('btn_big_1', btnSlot);
+		btn.setTouchStartAnimation('btn_big_1', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 			if(isState(UiState.HOME)) {
 				changeState(UiState.CONTENTS);
@@ -175,34 +175,34 @@ class UiControl {
 		});
 		
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy', _btnGroup);
-		btn.setTouchStartAnimation('btn_big_2', btnSlot);
+		btn.setTouchStartAnimation('btn_big_2', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 			changeState(UiState.LIST);
 		});
 		
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_big-copy2', _btnGroup);
-		btn.setTouchStartAnimation('btn_big_3', btnSlot);
+		btn.setTouchStartAnimation('btn_big_3', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_1', _btnGroup);
-		btn.setTouchStartAnimation('btn_mini_set_1', btnSlot);
+		btn.setTouchStartAnimation('btn_mini_set_1', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_2', _btnGroup);
-		btn.setTouchStartAnimation('btn_mini_set_2', btnSlot);
+		btn.setTouchStartAnimation('btn_mini_set_2', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_3', _btnGroup);
-		btn.setTouchStartAnimation('btn_mini_set_3', btnSlot);
+		btn.setTouchStartAnimation('btn_mini_set_3', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_4', _btnGroup);
-		btn.setTouchStartAnimation('btn_mini_set_4', btnSlot);
+		btn.setTouchStartAnimation('btn_mini_set_4', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		btn = new SpineSlotButton(_skeletonAnimation, 'Area_btn_mini_set_5', _btnGroup);
-		btn.setTouchStartAnimation('btn_mini_set_5', btnSlot);
+		btn.setTouchStartAnimation('btn_mini_set_5', _btnTrackIndex);
 		btn.onTouchEnd.add(function(btn:SpineSlotButton):void{
 		});
 		
@@ -234,7 +234,7 @@ class UiControl {
 	private function _changeState():void {
 		trace("_changeState", _prevState , _state);
 		var animState:AnimationState = _skeletonAnimation.state;
-		var track:TrackEntry = animState.setAnimationByName(animSlot, _prevState.outAnimaton, false);
+		var track:TrackEntry = animState.setAnimationByName(_mainTrackIndex, _prevState.outAnimaton, false);
 		track.onEnd = function(slot):void {
 			track.onEnd = null;
 			// コールバック内ですぐ次の処理をするとおかしくなるので1フレ待つ
@@ -248,8 +248,8 @@ class UiControl {
 			_btnGroup.enabled = false;
 			var animState:AnimationState = _skeletonAnimation.state;
 			var track:TrackEntry;
-			track = animState.setAnimationByName(animSlot, _state.inAnimaton, false);
-			animState.addAnimationByName(animSlot, _state.loopAnimaton, true, 0);
+			track = animState.setAnimationByName(_mainTrackIndex, _state.inAnimaton, false);
+			animState.addAnimationByName(_mainTrackIndex, _state.loopAnimaton, true, 0);
 			track.onEnd = function(slot:int):void {
 				track.onEnd = null;
 				// 念のため1フレーム待つ
