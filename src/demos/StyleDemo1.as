@@ -9,6 +9,7 @@ package demos {
 	import harayoki.starling2.filters.PosterizationFilter;
 	import harayoki.starling2.filters.ScanLineFilter;
 	import harayoki.starling2.filters.SlashShadedFilter;
+	import harayoki.starling2.styles.PosterizationStyle;
 	
 	import spine.Skeleton;
 	import spine.SkeletonData;
@@ -29,7 +30,7 @@ package demos {
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.AssetManager;
 	
-	public class FilterDemo1 extends DemoBase {
+	public class StyleDemo1 extends DemoBase {
 
 		private static var sPoint:Point = new Point();
 
@@ -47,7 +48,7 @@ package demos {
 		private var _tid:uint;
 		private var _hits:Array = [];
 
-		public function FilterDemo1(assetManager:AssetManager, starling:Starling = null) {
+		public function StyleDemo1(assetManager:AssetManager, starling:Starling = null) {
 			super(assetManager, starling);
 			_assetName = _lot(_assetNames) + "";
 		}
@@ -94,29 +95,12 @@ package demos {
 			Starling.juggler.add(_skeletonAnimation);
 
 			_animationState.timeScale = 0.5;
-			_animationState.addAnimationByName(0, "guruguru", true, 0);
+			_animationState.setAnimationByName(0, "guruguru", true);
 
 			_skeletonAnimation.touchable = true;
-
-			var scanLineFilter:ScanLineFilter = new ScanLineFilter(2, 0, 1, 0x000000, 0.7);
-			scanLineFilter.timeScale = 1.0;
-			Starling.juggler.add(scanLineFilter);
-			var slashShadedFilter:SlashShadedFilter = new SlashShadedFilter(8, 0, 0.1);
-			slashShadedFilter.timeScale = -2.0;
-			Starling.juggler.add(slashShadedFilter);
 			
-			var filter1:FilterChain = new FilterChain(
-				new DropShadowFilter(20, 0.785, 0x003333),
-				scanLineFilter
-			);
-			var filter2:FilterChain = new FilterChain(
-				new PosterizationFilter(),
-				slashShadedFilter
-			);
-			_skeletonAnimation.filter = filter1;
+			//_skeletonAnimation.style = new PosterizationStyle(); //  error
 			
-			var filters:Vector.<FragmentFilter> = new <FragmentFilter>[filter1, filter2, null];
-
 			_showInfo("Touch character to change filter effect.");
 
 			var touchCount:int = 0;
@@ -129,11 +113,10 @@ package demos {
 					
 					p.setTo(touch.globalX, touch.globalY);
 					if(SpineHitTestUtil.hitTestWithAttachmentByGlobalPoint(_skeletonAnimation, "hitAreaBody", p)) {
-						_animationState.addAnimation(1, _skeletonData.findAnimation("bowan"), false, 0);
+						_animationState.setAnimationByName(1, "bowan", false).timeScale = 2;
 						_showInfo("Touched ");
 						
 						touchCount++;
-						_skeletonAnimation.filter = filters[(touchCount % 3)];
 						
 						
 					} else {

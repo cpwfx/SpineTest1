@@ -1,19 +1,13 @@
 	package {
-	import demos.DemoBase;
-	import demos.FilterDemo1;
-	import demos.GoghDemo1;
-	import demos.HitTestDemo1;
-	import demos.RaptorDemo;
-	import demos.ScriptDemo1;
-	import demos.TankDemo;
+		import demos.DemoBase;
+		import demos.StyleDemo1;
 		import demos.UI1Demo1;
-		import demos.VineDemo;
-	
-	import starling.core.Starling;
-	import starling.display.Sprite;
-	import starling.utils.AssetManager;
-	
-	public class StarlingMain extends Sprite {
+		
+		import starling.core.Starling;
+		import starling.display.Sprite;
+		import starling.utils.AssetManager;
+		
+		public class StarlingMain extends Sprite {
 	
 		private var _assetManager:AssetManager;
 		private var _demo:DemoBase;
@@ -30,8 +24,9 @@
 			//_demo = new VineDemo(_assetManager, Starling.current);
 			//_demo = new TankDemo(_assetManager, Starling.current);
 			//_demo = new FilterDemo1(_assetManager, Starling.current);
-			// _demo = new ScriptDemo1(_assetManager, Starling.current);
-			_demo = new UI1Demo1(_assetManager, Starling.current);
+			//_demo = new ScriptDemo1(_assetManager, Starling.current);
+			//_demo = new UI1Demo1(_assetManager, Starling.current);
+			_demo = new StyleDemo1(_assetManager, Starling.current);
 			_demo.addAssets(assets);
 			addChild(_demo);
 	
