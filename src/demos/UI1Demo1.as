@@ -10,6 +10,7 @@ package demos {
 	import spine.SkeletonData;
 	import spine.Slot;
 	import spine.animation.AnimationState;
+	import spine.animation.AnimationStateData;
 	import spine.attachments.BoundingBoxAttachment;
 	import spine.starling.SkeletonAnimation;
 	
@@ -69,7 +70,9 @@ package demos {
 
 			_skeletonData = SpineUtil.createSkeletonData(_assetManager, _assetName, info.scale);
 
-			_skeletonAnimation = new SkeletonAnimation(_skeletonData);
+			var stateData:AnimationStateData = new AnimationStateData(_skeletonData);
+			// stateData.defaultMix = 1.0;
+			_skeletonAnimation = new SkeletonAnimation(_skeletonData, stateData);
 			addChild(_skeletonAnimation);
 			_skeletonAnimation.x = pos.x;
 			_skeletonAnimation.y = pos.y;
@@ -77,6 +80,19 @@ package demos {
 
 			_skeleton = _skeletonAnimation.skeleton;
 			_animationState = _skeletonAnimation.state;
+			_animationState.onStart.add(function(track:int):void{
+				trace("state.onStart", arguments);
+			});
+			_animationState.onEnd.add(function(track:int):void{
+				trace("state.onEnd", arguments);
+			});
+			_animationState.onComplete.add(function(track:int, count:int):void{
+				trace("state.onComplete", arguments);
+			});
+			_animationState.onEvent.add(function(track:int, data:*):void{
+				trace("state.onEvent", arguments);
+			});
+			
 			//trace("animations:", _skeletonData.animations);
 			//[trace] animations:
 			// btn_big_3,home_lp,btn_mini_set_5,btn_big_2,btn_mini_set_4,list_in,contents_lp,home_out,contents_out,
@@ -234,11 +250,18 @@ class UiControl {
 	private function _changeState():void {
 		trace("_changeState", _prevState , _state);
 		var animState:AnimationState = _skeletonAnimation.state;
-		var track:TrackEntry = animState.setAnimationByName(_mainTrackIndex, _prevState.outAnimaton, false);
-		track.onEnd = function(slot):void {
-			track.onEnd = null;
-			// コールバック内ですぐ次の処理をするとおかしくなるので1フレ待つ
-			Starling.juggler.delayCall(_playNextStateAnimation, 0);
+		var track0:TrackEntry = animState.setAnimationByName(_mainTrackIndex, _prevState.outAnimaton, false);
+		track0.onStart = function(slot:int):void {
+			trace('track0.onStart', arguments);
+		};
+		track0.onComplete = function(slot:int, count:int):void {
+			trace('track0.onComplete', arguments);
+			// onEndコールバック内ですぐ次のアニメ再生処理をするとおかしくなるのでonCompleteで見ている
+			track0.onStart = track0.onComplete = track0.onEnd = null;
+			_playNextStateAnimation();
+		};
+		track0.onEnd = function(slot):void {
+			trace('track0.onEnd', arguments);
 		}
 	}
 	
@@ -247,14 +270,30 @@ class UiControl {
 		if(_state) {
 			_btnGroup.enabled = false;
 			var animState:AnimationState = _skeletonAnimation.state;
-			var track:TrackEntry;
-			track = animState.setAnimationByName(_mainTrackIndex, _state.inAnimaton, false);
-			animState.addAnimationByName(_mainTrackIndex, _state.loopAnimaton, true, 0);
-			track.onEnd = function(slot:int):void {
-				track.onEnd = null;
+			var track1:TrackEntry, track2:TrackEntry;
+			track1 = animState.setAnimationByName(_mainTrackIndex, _state.inAnimaton, false);
+			track1.onStart = function(slot:int):void {
+				trace('track1.onStart', arguments);
+			};
+			track1.onComplete = function(slot:int):void {
+				trace('track1.onComplete', arguments);
+			};
+			track1.onEnd = function(slot:int):void {
+				trace('track1.onEnd', arguments);
+				track1.onStart = track1.onComplete = track1.onEnd = null;
 				// 念のため1フレーム待つ
 				Starling.juggler.delayCall(_setUpNextAnimation, 0);
 				_skeletonAnimation.skeleton.setSlotsToSetupPose(); // １フレあとで呼ぶと見えてはいけないパーツがちらっと見える
+			};
+			track2 = animState.addAnimationByName(_mainTrackIndex, _state.loopAnimaton, true, 0);
+			track2.onStart = function(slot:int):void {
+				trace('track2.onStart', arguments);
+			};
+			track2.onComplete = function(slot:int, count:int):void {
+				trace('track2.onComplete', arguments);
+			};
+			track2.onEnd = function(slot:int):void {
+				trace('track2.onEnd', arguments);
 			};
 		} else {
 			_btnGroup.enabled = true;
