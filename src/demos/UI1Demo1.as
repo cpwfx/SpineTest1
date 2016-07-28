@@ -32,7 +32,7 @@ package demos {
 		//private var _animations:Vector.<Slot>;
 		private var _hitAreaSlots:Vector.<Slot>;
 
-		private var _assetNames:Array = ["ui1"];
+		private var _assetNames:Array = ["_temp_/ui1"];
 		private var _infos:Object = {
 			"default" : {scale:0.5, pos:{x:480, y:280}}
 		};
