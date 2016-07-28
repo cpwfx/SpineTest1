@@ -1,5 +1,6 @@
 	package {
 		import demos.DemoBase;
+		import demos.ScriptDemo1;
 		import demos.StyleDemo1;
 		import demos.UI1Demo1;
 		
@@ -26,7 +27,8 @@
 			//_demo = new FilterDemo1(_assetManager, Starling.current);
 			//_demo = new ScriptDemo1(_assetManager, Starling.current);
 			//_demo = new UI1Demo1(_assetManager, Starling.current);
-			_demo = new StyleDemo1(_assetManager, Starling.current);
+			//_demo = new StyleDemo1(_assetManager, Starling.current);
+			_demo = new ScriptDemo1(_assetManager, Starling.current);
 			_demo.addAssets(assets);
 			addChild(_demo);
 	
