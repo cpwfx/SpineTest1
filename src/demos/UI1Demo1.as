@@ -233,7 +233,7 @@ class UiControl {
 	
 	public function changeState(state:UiState):void {
 		var animState:AnimationState = _skeletonAnimation.state;
-		animState.timeScale = 1.0;
+		animState.timeScale = 1.75;
 		if (_state == state) {
 			return;
 		}
