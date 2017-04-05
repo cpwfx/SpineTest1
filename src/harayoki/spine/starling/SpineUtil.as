@@ -43,7 +43,13 @@ package harayoki.spine.starling {
 			var skeletonJson:SkeletonJson = createSkeletonJson(assetManager, assetName);
 			skeletonJson.scale = scale;
 			var json:Object = assetManager.getObject(assetName);
+			if(!json) {
+				throw(new Error("no json for asset:"+ assetName));
+			}
 			var data:SkeletonData = skeletonJson.readSkeletonData(json);
+            if(!data) {
+                throw(new Error("no SkeletonData for asset:"+ assetName));
+            }
 			return data;
 		}
 
