@@ -73,12 +73,12 @@ package harayoki.spine.starling {
 				}
 			}
 			
-			for1 : for each(var touch:Touch in TOUCHES_END) {
-				P.setTo(touch.globalX, touch.globalY);
-				for2 : for each(var btn:SpineSlotButton in _buttons) {
-					var hit:Boolean = btn.hitTest(P, touch.phase);
-					if(hit) {
-						btn.invokeTouchEnd();
+			for1 : for each(var touch2:Touch in TOUCHES_END) {
+				P.setTo(touch2.globalX, touch2.globalY);
+				for2 : for each(var btn2:SpineSlotButton in _buttons) {
+					var hit2:Boolean = btn2.hitTest(P, touch2.phase);
+					if(hit2) {
+						btn2.invokeTouchEnd();
 						if(!allowMultiHitPerTouch) {
 							// 一度ヒットしたら背面のオブジェクトは無視する
 							break for2;
